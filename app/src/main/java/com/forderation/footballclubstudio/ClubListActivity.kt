@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import org.jetbrains.anko.setContentView
 
-class MainActivity : AppCompatActivity() {
+class ClubListActivity : AppCompatActivity() {
 
     var items:MutableList<Club> = mutableListOf()
 

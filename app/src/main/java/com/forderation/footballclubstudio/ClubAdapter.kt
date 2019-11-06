@@ -24,7 +24,7 @@ class ClubAdapter(private var clubList: List<Club>, private val clickItemListene
         private val image: ImageView = itemView.findViewById(ClubItemUI.clubImg)
         private val nameClub: TextView = itemView.findViewById(ClubItemUI.clubName)
         fun bind(itemClub: Club, clickItemListener: (Club) -> Unit){
-            Picasso.get().load(itemClub.clubLogo).fit().into(image)
+            Picasso.get().load(itemClub.clubLogo).placeholder(R.drawable.progress_animation).fit().into(image)
             nameClub.text = itemClub.clubName
             itemView.setOnClickListener {
                 clickItemListener(itemClub)

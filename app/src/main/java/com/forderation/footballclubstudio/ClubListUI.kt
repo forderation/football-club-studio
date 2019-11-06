@@ -4,9 +4,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 
-class ClubListUI(private val mAdapter:ClubAdapter): AnkoComponent<MainActivity>{
+class ClubListUI(private val mAdapter:ClubAdapter): AnkoComponent<ClubListActivity>{
 
-    override fun createView(ui: AnkoContext<MainActivity>) = with(ui){
+    override fun createView(ui: AnkoContext<ClubListActivity>) = with(ui){
         relativeLayout{
             lparams(matchParent, wrapContent)
             padding = dip(16)
