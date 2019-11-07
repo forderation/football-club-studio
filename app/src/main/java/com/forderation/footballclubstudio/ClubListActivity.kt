@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import org.jetbrains.anko.setContentView
+import org.jetbrains.anko.startActivity
 
 class ClubListActivity : AppCompatActivity() {
 
@@ -13,7 +14,7 @@ class ClubListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         prepareData()
         ClubListUI(ClubAdapter(items){
-
+            startActivity<ClubDetailActivity>("club" to it)
         }).setContentView(this)
     }
 

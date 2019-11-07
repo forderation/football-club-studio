@@ -2,6 +2,7 @@ package com.forderation.footballclubstudio
 
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -37,13 +38,14 @@ class ClubItemUI :AnkoComponent<ViewGroup> {
                             textAlignment = View.TEXT_ALIGNMENT_CENTER
                             textColor = Color.WHITE
                             textSize = sp(6).toFloat()
+                            ellipsize = TextUtils.TruncateAt.END
                         }.lparams(wrapContent, wrapContent){
                             setMargins(30,10,30,10)
                         }
                     }.lparams(matchParent, wrapContent)
                     radius = dip(10).toFloat()
                 }.lparams(matchParent, 600){
-                    setMargins(20,20,20,20)
+                    margin = dip(5)
                 }
             }
         }
