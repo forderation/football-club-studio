@@ -1,9 +1,11 @@
-package com.forderation.footballclubstudio
+package com.forderation.footballclubstudio.ui
 
 import android.graphics.Typeface
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import com.forderation.footballclubstudio.ClubDetailActivity
+import com.forderation.footballclubstudio.R
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
@@ -24,7 +26,6 @@ class ClubDetailUI : AnkoComponent<ClubDetailActivity>{
                     orientation = LinearLayout.VERTICAL
                     relativeLayout {
                         frameLayout {
-                            id = R.id.frameLayout
                             imageView {
                                 scaleType = ImageView.ScaleType.CENTER_CROP
                                 Picasso.get().load(R.drawable.banner_football).fit().into(this)
@@ -38,11 +39,13 @@ class ClubDetailUI : AnkoComponent<ClubDetailActivity>{
                                     imageView {
                                         padding = dip(10)
                                         backgroundColor = resources.getColor(R.color.colorPrimary)
-                                        id = clubLogo
+                                        id =
+                                            clubLogo
                                     }.lparams(width = matchParent, height = matchParent)
                                 }.lparams(width = dip(100), height = dip(100))
                                 textView {
-                                    id = clubTitle
+                                    id =
+                                        clubTitle
                                     textSize = sp(8).toFloat()
                                     textAlignment = View.TEXT_ALIGNMENT_CENTER
                                     setTypeface(typeface, Typeface.BOLD)

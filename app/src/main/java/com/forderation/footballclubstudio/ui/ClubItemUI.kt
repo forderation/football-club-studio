@@ -1,13 +1,11 @@
-package com.forderation.footballclubstudio
+package com.forderation.footballclubstudio.ui
 
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import com.forderation.footballclubstudio.R.color.colorPrimary
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 
@@ -17,6 +15,7 @@ class ClubItemUI :AnkoComponent<ViewGroup> {
     companion object {
         const val clubImg = 1
         const val clubName = 2
+        const val clubCV = 3
     }
 
     override fun createView(ui: AnkoContext<ViewGroup>): View {
@@ -24,7 +23,7 @@ class ClubItemUI :AnkoComponent<ViewGroup> {
             return linearLayout {
                 orientation = LinearLayout.VERTICAL
                 cardView{
-                    background.setColorFilter(resources.getColor(colorPrimary),PorterDuff.Mode.SRC_ATOP)
+                    id = clubCV
                     verticalLayout {
                         orientation = LinearLayout.VERTICAL
                         imageView {
