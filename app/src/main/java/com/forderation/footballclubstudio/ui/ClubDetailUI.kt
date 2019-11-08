@@ -39,8 +39,7 @@ class ClubDetailUI : AnkoComponent<ClubDetailActivity>{
                                     imageView {
                                         padding = dip(10)
                                         backgroundColor = resources.getColor(R.color.colorPrimary)
-                                        id =
-                                            clubLogo
+                                        id = clubLogo
                                     }.lparams(width = matchParent, height = matchParent)
                                 }.lparams(width = dip(100), height = dip(100))
                                 textView {
