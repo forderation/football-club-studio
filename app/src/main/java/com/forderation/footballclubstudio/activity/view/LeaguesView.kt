@@ -6,6 +6,5 @@ interface LeaguesView{
     fun showLoading()
     fun hideLoading()
     fun loadFail(msg:String)
-    fun showLeagues(data: MutableList<League>)
     fun addLeague(item: League)
 }

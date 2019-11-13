@@ -1,6 +1,8 @@
 package com.forderation.footballclubstudio.activity
 
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,10 +24,6 @@ class LeaguesActivity : AppCompatActivity(), LeaguesView {
     private lateinit var snackBar: Snackbar
     private lateinit var presenter: LeaguesPresenter
     private lateinit var adapter: LeagueAdapter
-
-    override fun showLeagues(data: MutableList<League>) {
-        rv_leagues.adapter?.notifyDataSetChanged()
-    }
 
     override fun showLoading() {
         snackBar.show()
@@ -53,8 +51,27 @@ class LeaguesActivity : AppCompatActivity(), LeaguesView {
             adapter.refreshAdapter()
             presenter.getLeagues()
         }
-        presenter.initSpinner(spinner,applicationContext)
-        presenter.getLeagues()
+        presenter.initSpinner(spinner, applicationContext)
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                adapter.refreshAdapter()
+                when (spinner.selectedItem.toString()) {
+                    "10" -> {
+                        presenter.limitItem = 10
+                    }
+                    "30" -> {
+                        presenter.limitItem = 30
+                    }
+                    "More than 60" -> {
+                        presenter.limitItem = 60
+                    }
+                }
+            }
+
+        }
+        presenter.getLeagues()
     }
 }

@@ -13,6 +13,14 @@ import org.jetbrains.anko.uiThread
 import retrofit2.Call
 
 class LeaguesPresenter(private val view: LeaguesView) {
+    private val typeLeague = "Soccer"
+    var updatedList: MutableList<League> = arrayListOf()
+
+    var limitItem = 10
+        set(value) {
+            field = value
+            getLeagues()
+        }
 
     private fun initList(): List<League>? {
         val getLeagues: Call<GetLeagues> = ApiClient.service.listLeagues()
@@ -23,23 +31,36 @@ class LeaguesPresenter(private val view: LeaguesView) {
         view.showLoading()
         doAsync {
             val listLeagues: List<League>? = initList()
-            val updatedList: MutableList<League> = arrayListOf()
-            listLeagues?.forEach {
-                if (it.id != null) {
-                    val api = ApiClient.service.detailLeague(it.id)
-                    val league:League? = api.execute().body()?.leagues?.get(0)
-                    if(league!=null){
-                        if(league.type.equals("Soccer")){
-                            updatedList.add(league)
-                            uiThread {
-                                view.addLeague(league)
-                            }
-                        }
+            if(limitItem != 60){
+                for(x in 0 until limitItem){
+                    if(listLeagues?.get(x) != null){
+                        filterLeague(listLeagues[x])
                     }
+                }
+            }else{
+                listLeagues?.forEach {
+                    filterLeague(it)
                 }
             }
             uiThread {
                 view.hideLoading()
+            }
+        }
+    }
+
+    private fun filterLeague(leagueOld: League){
+        doAsync {
+            if (leagueOld.id != null) {
+                val api = ApiClient.service.detailLeague(leagueOld.id)
+                val league:League? = api.execute().body()?.leagues?.get(0)
+                if(league!=null){
+                    if(league.type.equals(typeLeague)){
+                        updatedList.add(league)
+                        uiThread {
+                            view.addLeague(league)
+                        }
+                    }
+                }
             }
         }
     }

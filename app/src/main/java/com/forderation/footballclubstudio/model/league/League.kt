@@ -24,4 +24,8 @@ data class League(
     val background: String?,
     @SerializedName("strSport")
     val type:String?
-) : Parcelable
+) : Parcelable{
+    fun smallBackground():String{
+        return background.plus("/preview")
+    }
+}
