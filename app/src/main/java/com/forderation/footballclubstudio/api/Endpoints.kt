@@ -1,5 +1,6 @@
 package com.forderation.footballclubstudio.api
 
+import com.forderation.footballclubstudio.model.club.GetTeams
 import com.forderation.footballclubstudio.model.league.GetLeagues
 import retrofit2.Call
 import retrofit2.http.GET
@@ -11,4 +12,7 @@ interface Endpoints{
 
     @GET("api/v1/json/1/lookupleague.php?")
     fun detailLeague(@Query("id") id:String):Call<GetLeagues>
+
+    @GET("api/v1/json/1/search_all_teams.php?")
+    fun listClub(@Query("l") nameLeague:String): Call<GetTeams>
 }
