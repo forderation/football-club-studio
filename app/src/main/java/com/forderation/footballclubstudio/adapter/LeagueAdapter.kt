@@ -11,6 +11,7 @@ import com.forderation.footballclubstudio.adapter.LeagueAdapter.VHolder
 import com.forderation.footballclubstudio.R.id.*
 import com.forderation.footballclubstudio.model.league.League
 import com.squareup.picasso.Picasso
+import jp.wasabeef.picasso.transformations.BlurTransformation
 import org.jetbrains.anko.find
 import org.jetbrains.anko.layoutInflater
 
@@ -41,12 +42,14 @@ class LeagueAdapter(
 
     class VHolder(itemView: View) :RecyclerView.ViewHolder(itemView) {
         private val imgLeague:ImageView = itemView.find(img_league)
-        private val titleLeague:TextView = itemView.find(title_league)
+        private val titleLeague:TextView = itemView.find(desc_league)
         private val descLeague:TextView = itemView.find(desc_league)
         private val backLeague:ImageView = itemView.find(background_league)
         fun bind(league:League, leagueListener: (League) -> Unit){
             Picasso.get().load(league.badge).fit().centerInside().into(imgLeague)
-            Picasso.get().load(league.smallBackground()).fit().centerCrop().into(backLeague)
+            Picasso.get().load(league.smallBackground())
+                .transform(BlurTransformation(itemView.context, 25, 1))
+                .fit().centerCrop().into(backLeague)
             titleLeague.text = league.name
             descLeague.text = league.description
             itemView.setOnClickListener { leagueListener(league) }

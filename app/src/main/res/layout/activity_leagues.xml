@@ -24,7 +24,7 @@
             <TextView
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorWhite"
                 android:layout_width="match_parent"
                 android:text="Max display item : "
                 android:layout_height="match_parent"/>

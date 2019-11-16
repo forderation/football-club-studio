@@ -23,9 +23,14 @@ data class League(
     @SerializedName("strFanart1")
     val background: String?,
     @SerializedName("strSport")
-    val type:String?
+    val type:String?,
+    @SerializedName("strTrophy")
+    val trophy:String?
 ) : Parcelable{
     fun smallBackground():String{
         return background.plus("/preview")
+    }
+    fun getSmallTrophy():String{
+        return trophy.plus("/preview")
     }
 }

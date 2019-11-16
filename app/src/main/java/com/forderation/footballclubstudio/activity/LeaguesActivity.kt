@@ -41,7 +41,9 @@ class LeaguesActivity : AppCompatActivity(), LeaguesView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leagues)
-        adapter = LeagueAdapter(arrayListOf(), this) {}
+        adapter = LeagueAdapter(arrayListOf(), this) {
+            LeagueDetailActivity.launchActivity(applicationContext,it)
+        }
         snackBar =
             Snackbar.make(swipe_layout, "Now run to get league ...", Snackbar.LENGTH_INDEFINITE)
         presenter = LeaguesPresenter(this)
