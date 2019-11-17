@@ -34,8 +34,8 @@ class ClubAdapter(private val clickItemListener: (Club) -> Unit) :
 
     class VHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val tvClubName = itemView.find<TextView>(tv_club)
-        val tvClubImg = itemView.find<ImageView>(logo_club)
+        private val tvClubName = itemView.find<TextView>(tv_club)
+        private val tvClubImg = itemView.find<ImageView>(logo_club)
         fun bind(club: Club, listener: (Club) -> Unit) {
             Picasso.get().load(club.getBadgeSmall()).fit().centerInside().into(tvClubImg)
             tvClubName.text = club.name

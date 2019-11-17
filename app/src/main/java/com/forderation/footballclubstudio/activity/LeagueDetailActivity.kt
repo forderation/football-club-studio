@@ -12,11 +12,12 @@ import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.activity.presenter.DetailLeaguePresenter
 import com.forderation.footballclubstudio.activity.view.DetailLeagueView
 import com.forderation.footballclubstudio.adapter.ClubAdapter
+import com.forderation.footballclubstudio.adapter.PagerAdapter
+import com.forderation.footballclubstudio.fragment.EventFragment
 import com.forderation.footballclubstudio.model.club.Club
 import com.forderation.footballclubstudio.model.league.League
 import com.forderation.footballclubstudio.utils.BottomSheet
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_leagues.*
 import kotlinx.android.synthetic.main.content_league_detail.*
 import kotlinx.android.synthetic.main.toolbar_league.*
 
@@ -38,6 +39,11 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView{
 
     override fun showListClub(clubList: List<Club>) {
         adapter.clubList = clubList.toMutableList()
+        val latestMatch = EventFragment(league?.id!!,clubList)
+        val pagerAdapter = PagerAdapter(supportFragmentManager)
+        pagerAdapter.listFragment.add(latestMatch)
+        view_pager_event.adapter = pagerAdapter
+        view_pager_event.adapter?.notifyDataSetChanged()
     }
 
     private lateinit var adapter: ClubAdapter
@@ -70,13 +76,16 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView{
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             android.R.id.home -> {
                 this.finish()
-                return true
+                true
+            }
+            R.id.search_menu -> {
+                true
             }
             else -> {
-                return super.onOptionsItemSelected(item)
+                super.onOptionsItemSelected(item)
             }
         }
     }
