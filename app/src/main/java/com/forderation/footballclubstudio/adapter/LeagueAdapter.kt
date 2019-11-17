@@ -24,7 +24,7 @@ class LeagueAdapter(
         return VHolder(ctx.layoutInflater.inflate(R.layout.item_league,parent,false))
     }
 
-    fun refreshAdapter(){
+    fun clearAdapter(){
         leagueList.clear()
         notifyDataSetChanged()
     }

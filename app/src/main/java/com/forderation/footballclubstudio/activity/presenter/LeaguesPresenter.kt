@@ -64,12 +64,4 @@ class LeaguesPresenter(private val view: LeaguesView) {
             }
         }
     }
-
-    fun initSpinner(spinner:Spinner, ctx:Context){
-        ArrayAdapter.createFromResource(ctx, R.array.choice_total_league, android.R.layout.simple_spinner_item)
-            .also { adapter ->
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinner.adapter = adapter
-            }
-    }
 }

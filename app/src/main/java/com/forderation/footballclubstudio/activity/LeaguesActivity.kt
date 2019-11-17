@@ -2,7 +2,6 @@ package com.forderation.footballclubstudio.activity
 
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -11,6 +10,7 @@ import com.forderation.footballclubstudio.activity.presenter.LeaguesPresenter
 import com.forderation.footballclubstudio.activity.view.LeaguesView
 import com.forderation.footballclubstudio.adapter.LeagueAdapter
 import com.forderation.footballclubstudio.model.league.League
+import com.fxn.OnBubbleClickListener
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_leagues.*
 import org.jetbrains.anko.support.v4.onRefresh
@@ -27,10 +27,12 @@ class LeaguesActivity : AppCompatActivity(), LeaguesView {
 
     override fun showLoading() {
         snackBar.show()
+        progress_loading.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
         snackBar.dismiss()
+        progress_loading.visibility = View.INVISIBLE
         swipe_layout.isRefreshing = false
     }
 
@@ -50,30 +52,29 @@ class LeaguesActivity : AppCompatActivity(), LeaguesView {
         rv_leagues.layoutManager = GridLayoutManager(this, 2)
         rv_leagues.adapter = adapter
         swipe_layout.onRefresh {
-            adapter.refreshAdapter()
+            adapter.clearAdapter()
             presenter.getLeagues()
         }
-        presenter.initSpinner(spinner, applicationContext)
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                adapter.refreshAdapter()
-                when (spinner.selectedItem.toString()) {
-                    "10" -> {
+        tab_item_menu.addBubbleListener(object : OnBubbleClickListener {
+            override fun onBubbleClick(id: Int) {
+                if(currentItemId != null && id == currentItemId) return
+                adapter.clearAdapter()
+                when(id){
+                    R.id.item_10 -> {
                         presenter.limitItem = 10
                     }
-                    "30" -> {
+                    R.id.item_30 -> {
                         presenter.limitItem = 30
                     }
-                    "More than 60" -> {
+                    R.id.item_60 -> {
                         presenter.limitItem = 60
                     }
                 }
+                currentItemId = id
             }
-
-        }
+        })
         presenter.getLeagues()
     }
+    private var currentItemId:Int? = null
 }

@@ -16,6 +16,8 @@ import com.forderation.footballclubstudio.model.club.Club
 import com.forderation.footballclubstudio.model.league.League
 import com.forderation.footballclubstudio.utils.BottomSheet
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_leagues.*
+import kotlinx.android.synthetic.main.content_league_detail.*
 import kotlinx.android.synthetic.main.toolbar_league.*
 
 class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView{
