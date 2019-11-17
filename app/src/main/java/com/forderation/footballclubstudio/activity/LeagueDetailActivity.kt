@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.activity.presenter.DetailLeaguePresenter
 import com.forderation.footballclubstudio.activity.view.DetailLeagueView
@@ -17,21 +18,23 @@ import com.forderation.footballclubstudio.fragment.EventFragment
 import com.forderation.footballclubstudio.model.club.Club
 import com.forderation.footballclubstudio.model.league.League
 import com.forderation.footballclubstudio.utils.BottomSheet
+import com.fxn.OnBubbleClickListener
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_league_detail.*
 import kotlinx.android.synthetic.main.toolbar_league.*
+import org.jetbrains.anko.support.v4.onPageChangeListener
 
-class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView{
+class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
 
     override fun showBottomDesc(desc: String) {
-        BottomSheet(desc).show(supportFragmentManager,"BottomSheet")
+        BottomSheet(desc).show(supportFragmentManager, "BottomSheet")
     }
 
     companion object {
         const val ADDITIONAL_INFO = "ADDITIONAL_INFO"
-        fun launchActivity(context: Context, league: League){
-            val intent = Intent(context,LeagueDetailActivity::class.java)
-            intent.putExtra(ADDITIONAL_INFO,league)
+        fun launchActivity(context: Context, league: League) {
+            val intent = Intent(context, LeagueDetailActivity::class.java)
+            intent.putExtra(ADDITIONAL_INFO, league)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
@@ -39,11 +42,25 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView{
 
     override fun showListClub(clubList: List<Club>) {
         adapter.clubList = clubList.toMutableList()
-        val latestMatch = EventFragment(league?.id!!,clubList)
+        val latestMatch = EventFragment(league?.id!!, clubList, EventFragment.LATEST_MATCH)
+        val nextMatch = EventFragment(league?.id!!, clubList, EventFragment.UPCOMING_MATCH)
         val pagerAdapter = PagerAdapter(supportFragmentManager)
         pagerAdapter.listFragment.add(latestMatch)
+        pagerAdapter.listFragment.add(nextMatch)
         view_pager_event.adapter = pagerAdapter
-        view_pager_event.adapter?.notifyDataSetChanged()
+        tab_event_menu.addBubbleListener(object : OnBubbleClickListener {
+            override fun onBubbleClick(id: Int) {
+                when (id) {
+                    R.id.last_match_tab -> {
+                        view_pager_event.currentItem = EventFragment.LATEST_MATCH
+                    }
+                    R.id.next_match_tab -> {
+                        view_pager_event.currentItem = EventFragment.UPCOMING_MATCH
+                    }
+                }
+            }
+        })
+        tab_event_menu.setupBubbleTabBar(view_pager_event)
     }
 
     private lateinit var adapter: ClubAdapter
@@ -66,7 +83,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView{
         supportActionBar?.title = league?.name
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        desc_league.setOnClickListener { showBottomDesc(desc_league.text.toString()) }
+        desc_league.setOnClickListener { showBottomDesc(desc_league.text.toString())}
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

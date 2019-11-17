@@ -2,7 +2,7 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/home"
+        android:id="@+id/last_match_tab"
         android:icon="@drawable/ic_history_black_24dp"
         android:title="@string/last_match"
         android:iconTint="@color/colorWhite"
@@ -10,7 +10,7 @@
         tools:targetApi="o" />
 
     <item
-        android:id="@+id/log"
+        android:id="@+id/next_match_tab"
         android:iconTint="@color/colorWhite"
         android:icon="@drawable/ic_schedule_black_24dp"
         android:title="@string/next_match"

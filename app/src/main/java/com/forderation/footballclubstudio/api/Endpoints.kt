@@ -19,4 +19,7 @@ interface Endpoints{
 
     @GET("api/v1/json/1/eventspastleague.php?")
     fun listPastEvent(@Query("id") idLeague:String): Call<GetEvents>
+
+    @GET("api/v1/json/1/eventsnextleague.php?")
+    fun listNextEvent(@Query("id") idLeague:String): Call<GetEvents>
 }
