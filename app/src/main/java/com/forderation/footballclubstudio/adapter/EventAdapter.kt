@@ -13,7 +13,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.find
 
 class EventAdapter(
-    private val eventList: List<Event>,
+    private var eventList: List<Event>,
     private val clubList: List<Club>,
     private val mListener: (Event) -> Unit
 ) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
@@ -22,6 +22,11 @@ class EventAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_event, parent, false)
         return ViewHolder(view)
+    }
+
+    fun setEventList(newList: List<Event>){
+        eventList = newList
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

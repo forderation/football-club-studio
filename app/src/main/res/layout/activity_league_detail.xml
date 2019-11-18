@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/coordinator_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_collapseMode="pin"
     tools:context=".activity.LeagueDetailActivity">
@@ -15,10 +16,12 @@
         android:fitsSystemWindows="false"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <include layout="@layout/toolbar_league"/>
+        <include layout="@layout/toolbar_league" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_league_detail" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_league_detail" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

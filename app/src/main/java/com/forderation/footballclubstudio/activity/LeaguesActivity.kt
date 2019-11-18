@@ -1,5 +1,6 @@
 package com.forderation.footballclubstudio.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -44,7 +45,9 @@ class LeaguesActivity : AppCompatActivity(), LeaguesView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leagues)
         adapter = LeagueAdapter(arrayListOf(), this) {
-            LeagueDetailActivity.launchActivity(applicationContext,it)
+            val intent = Intent(applicationContext, LeagueDetailActivity::class.java)
+            intent.putExtra(LeagueDetailActivity.ADDITIONAL_INFO, it)
+            startActivity(intent)
         }
         snackBar =
             Snackbar.make(swipe_layout, "Now run to get league ...", Snackbar.LENGTH_INDEFINITE)

@@ -1,28 +1,34 @@
 package com.forderation.footballclubstudio.activity
 
+import android.app.SearchManager
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.activity.presenter.DetailLeaguePresenter
 import com.forderation.footballclubstudio.activity.view.DetailLeagueView
 import com.forderation.footballclubstudio.adapter.ClubAdapter
-import com.forderation.footballclubstudio.adapter.PagerAdapter
-import com.forderation.footballclubstudio.fragment.EventFragment
+import com.forderation.footballclubstudio.adapter.EventAdapter
+import com.forderation.footballclubstudio.fragment.NextLastFragment
+import com.forderation.footballclubstudio.fragment.ResultEventFragment
 import com.forderation.footballclubstudio.model.club.Club
 import com.forderation.footballclubstudio.model.league.League
 import com.forderation.footballclubstudio.utils.BottomSheet
-import com.fxn.OnBubbleClickListener
+import com.forderation.footballclubstudio.utils.EventViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.content_league_detail.*
+import kotlinx.android.synthetic.main.activity_league_detail.*
 import kotlinx.android.synthetic.main.toolbar_league.*
-import org.jetbrains.anko.support.v4.onPageChangeListener
 
 class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
 
@@ -32,37 +38,42 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
 
     companion object {
         const val ADDITIONAL_INFO = "ADDITIONAL_INFO"
-        fun launchActivity(context: Context, league: League) {
-            val intent = Intent(context, LeagueDetailActivity::class.java)
-            intent.putExtra(ADDITIONAL_INFO, league)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
+    }
+
+    private lateinit var clubList:List<Club>
+
+    override fun showListClub(clubList: List<Club>) {
+        this.clubList = clubList
+        adapter.clubList = clubList.toMutableList()
+        mAdapter = EventAdapter(arrayListOf(),clubList){}
+        showFgNextLastEvent()
+    }
+
+    private fun showFgNextLastEvent(){
+        val fg = NextLastFragment(clubList,league?.id!!)
+        val fragment = fragmentManager.findFragmentByTag(NextLastFragment::class.java.simpleName)
+        Log.d("fragmentlog","fragmen size: " + clubList.size)
+        if (fragment !is NextLastFragment){
+            Log.d("fragmentlog","fragmen created")
+            fragmentManager
+                .beginTransaction()
+                .replace(R.id.frame_container, fg,NextLastFragment::class.java.simpleName)
+                .commit()
         }
     }
 
-    override fun showListClub(clubList: List<Club>) {
-        adapter.clubList = clubList.toMutableList()
-        val latestMatch = EventFragment(league?.id!!, clubList, EventFragment.LATEST_MATCH)
-        val nextMatch = EventFragment(league?.id!!, clubList, EventFragment.UPCOMING_MATCH)
-        val pagerAdapter = PagerAdapter(supportFragmentManager)
-        pagerAdapter.listFragment.add(latestMatch)
-        pagerAdapter.listFragment.add(nextMatch)
-        view_pager_event.adapter = pagerAdapter
-        tab_event_menu.addBubbleListener(object : OnBubbleClickListener {
-            override fun onBubbleClick(id: Int) {
-                when (id) {
-                    R.id.last_match_tab -> {
-                        view_pager_event.currentItem = EventFragment.LATEST_MATCH
-                    }
-                    R.id.next_match_tab -> {
-                        view_pager_event.currentItem = EventFragment.UPCOMING_MATCH
-                    }
-                }
-            }
-        })
-        tab_event_menu.setupBubbleTabBar(view_pager_event)
+    private fun showFgEventSearchResult(){
+        val fg = ResultEventFragment(mAdapter)
+        val fragment = fragmentManager.findFragmentByTag(ResultEventFragment::class.java.simpleName)
+        if (fragment !is ResultEventFragment){
+            fragmentManager
+                .beginTransaction()
+                .replace(R.id.frame_container, fg,ResultEventFragment::class.java.simpleName)
+                .commit()
+        }
     }
 
+    private lateinit var fragmentManager:FragmentManager
     private lateinit var adapter: ClubAdapter
     private lateinit var presenter: DetailLeaguePresenter
     private lateinit var rvClub: RecyclerView
@@ -71,6 +82,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_league_detail)
+        fragmentManager = supportFragmentManager
         adapter = ClubAdapter { }
         rvClub = list_club
         presenter = DetailLeaguePresenter(this)
@@ -82,13 +94,64 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
         desc_league.text = league?.description
         supportActionBar?.title = league?.name
         supportActionBar?.setHomeButtonEnabled(true)
+        snackbar = Snackbar.make(coordinator_layout,"Now loading to get data",Snackbar.LENGTH_INDEFINITE)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         desc_league.setOnClickListener { showBottomDesc(desc_league.text.toString())}
+        viewModel = ViewModelProviders.of(this).get(EventViewModel::class.java)
+        viewModel.listEvent().observe(this, Observer {
+            if(it!=null){
+                val listEvent = it.filter { e ->
+                    e.strSport.equals("Soccer") && e.idLeague.equals(league?.id)
+                }.toMutableList()
+                mAdapter.setEventList(listEvent)
+            }
+        })
+        viewModel.onResponse().observe(this, Observer {
+            Toast.makeText(this,it,Toast.LENGTH_SHORT).show()
+        })
+        viewModel.onLoading().observe(this, Observer {
+            if(it){
+                snackbar.show()
+            }else{
+                snackbar.dismiss()
+            }
+        })
     }
+
+    private lateinit var snackbar: Snackbar
+
+    private lateinit var mAdapter: EventAdapter
+
+    private lateinit var viewModel:EventViewModel
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         inflater.inflate(R.menu.option_menu, menu)
+        val searchItem = menu?.findItem(R.id.search_menu)
+        val searchView = searchItem?.actionView as SearchView
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener{
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                return true
+            }
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                showFgNextLastEvent()
+                return true
+            }
+        })
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView.queryHint = resources.getString(R.string.search_hint) + " ${league?.name}"
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    viewModel.getData(query)
+                }
+                return false
+            }
+        })
         return true
     }
 
@@ -99,6 +162,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
                 true
             }
             R.id.search_menu -> {
+                showFgEventSearchResult()
                 true
             }
             else -> {

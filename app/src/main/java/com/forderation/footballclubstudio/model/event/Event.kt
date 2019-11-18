@@ -8,8 +8,12 @@ import kotlinx.android.parcel.Parcelize
 data class Event(
     @SerializedName("idEvent")
     val id:String?,
+    @SerializedName("idLeague")
+    val idLeague:String?,
     @SerializedName("strEvent")
     val name:String?,
+    @SerializedName("strSport")
+    val strSport:String?,
     @SerializedName("strDate")
     val date:String?,
     @SerializedName("strTime")
