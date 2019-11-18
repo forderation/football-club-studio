@@ -1,9 +1,5 @@
 package com.forderation.footballclubstudio.activity.presenter
 
-import android.content.Context
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.activity.view.LeaguesView
 import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.model.league.GetLeagues

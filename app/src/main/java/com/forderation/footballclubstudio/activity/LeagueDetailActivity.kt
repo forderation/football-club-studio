@@ -2,8 +2,8 @@ package com.forderation.footballclubstudio.activity
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -45,16 +45,20 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
     override fun showListClub(clubList: List<Club>) {
         this.clubList = clubList
         adapter.clubList = clubList.toMutableList()
-        mAdapter = EventAdapter(arrayListOf(),clubList){}
+        mAdapter = EventAdapter(arrayListOf(),clubList){ e, h, a ->
+            val intent = Intent(this,EventDetailActivity::class.java)
+            intent.putExtra(EventDetailActivity.EVENT_INTENT,e)
+            intent.putExtra(EventDetailActivity.HOME_BADGE,h)
+            intent.putExtra(EventDetailActivity.AWAY_BADGE,a)
+            startActivity(intent)
+        }
         showFgNextLastEvent()
     }
 
     private fun showFgNextLastEvent(){
         val fg = NextLastFragment(clubList,league?.id!!)
         val fragment = fragmentManager.findFragmentByTag(NextLastFragment::class.java.simpleName)
-        Log.d("fragmentlog","fragmen size: " + clubList.size)
         if (fragment !is NextLastFragment){
-            Log.d("fragmentlog","fragmen created")
             fragmentManager
                 .beginTransaction()
                 .replace(R.id.frame_container, fg,NextLastFragment::class.java.simpleName)
@@ -94,14 +98,14 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
         desc_league.text = league?.description
         supportActionBar?.title = league?.name
         supportActionBar?.setHomeButtonEnabled(true)
-        snackbar = Snackbar.make(coordinator_layout,"Now loading to get data",Snackbar.LENGTH_INDEFINITE)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        snackbar = Snackbar.make(coordinator_layout,getString(R.string.loading_search),Snackbar.LENGTH_INDEFINITE)
         desc_league.setOnClickListener { showBottomDesc(desc_league.text.toString())}
         viewModel = ViewModelProviders.of(this).get(EventViewModel::class.java)
         viewModel.listEvent().observe(this, Observer {
             if(it!=null){
                 val listEvent = it.filter { e ->
-                    e.strSport.equals("Soccer") && e.idLeague.equals(league?.id)
+                    e.strSport.equals(getString(R.string.sport_type)) && e.idLeague.equals(league?.id)
                 }.toMutableList()
                 mAdapter.setEventList(listEvent)
             }

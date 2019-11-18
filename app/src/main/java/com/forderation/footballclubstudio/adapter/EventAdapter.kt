@@ -15,7 +15,7 @@ import org.jetbrains.anko.find
 class EventAdapter(
     private var eventList: List<Event>,
     private val clubList: List<Club>,
-    private val mListener: (Event) -> Unit
+    private val mListener: (Event, String, String) -> Unit
 ) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,21 +48,25 @@ class EventAdapter(
         fun bind(
             mEvent: Event,
             clubList: List<Club>,
-            mListener: (Event) -> Unit
+            mListener: (Event, String, String) -> Unit
         ) {
             titleEvent.text = mEvent.name
             scoreHome.text = mEvent.homeScore
             scoreAway.text = mEvent.awayScore
             timeEvent.text = mEvent.time
             dateEvent.text = mEvent.date
+            var homeBadgeUrl: String? = ""
+            var awayBadgeUrl: String? = ""
             clubList.forEach {
                 if(it.id.equals(mEvent.idHome)){
                     Picasso.get().load(it.badge).fit().centerInside().into(homeBadge)
+                    homeBadgeUrl = it.badge
                 }else if(it.id.equals(mEvent.idAway)){
                     Picasso.get().load(it.badge).fit().centerInside().into(awayBadge)
+                    awayBadgeUrl = it.badge
                 }
             }
-            mView.setOnClickListener { mListener(mEvent) }
+            mView.setOnClickListener { mListener(mEvent,homeBadgeUrl!!,awayBadgeUrl!!) }
         }
     }
 }

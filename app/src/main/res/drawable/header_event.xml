@@ -3,6 +3,6 @@
     <solid android:color="@color/colorWhite" />
     <size android:width="10dp"/>
     <padding android:bottom="0dp" android:left="0dp" android:right="0dp" android:top="0dp"/>
-    <corners android:topLeftRadius="0.1dp" android:bottomLeftRadius="15dp"
-        android:topRightRadius="0.1dp" android:bottomRightRadius="15dp"/>
+    <corners android:topLeftRadius="50dp" android:bottomLeftRadius="10dp"
+        android:topRightRadius="10dp" android:bottomRightRadius="50dp"/>
 </shape>
