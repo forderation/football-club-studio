@@ -10,8 +10,8 @@ import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.adapter.EventAdapter
 import kotlinx.android.synthetic.main.fragment_event_list.*
 
-class ResultEventFragment(private var adapter: EventAdapter):Fragment(){
-
+class ResultEventFragment :Fragment(){
+    var adapter: EventAdapter? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

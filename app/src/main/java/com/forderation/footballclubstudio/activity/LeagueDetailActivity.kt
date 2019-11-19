@@ -56,7 +56,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
     }
 
     private fun showFgNextLastEvent(){
-        val fg = NextLastFragment(clubList,league?.id!!)
+        val fg = NextLastFragment.newInstance(clubList,league?.id!!)
         val fragment = fragmentManager.findFragmentByTag(NextLastFragment::class.java.simpleName)
         if (fragment !is NextLastFragment){
             fragmentManager
@@ -67,7 +67,8 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
     }
 
     private fun showFgEventSearchResult(){
-        val fg = ResultEventFragment(mAdapter)
+        val fg = ResultEventFragment()
+        fg.adapter = mAdapter
         val fragment = fragmentManager.findFragmentByTag(ResultEventFragment::class.java.simpleName)
         if (fragment !is ResultEventFragment){
             fragmentManager

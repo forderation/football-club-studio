@@ -10,7 +10,22 @@ import com.forderation.footballclubstudio.model.club.Club
 import com.fxn.OnBubbleClickListener
 import kotlinx.android.synthetic.main.fragment_next_last_match.*
 
-class NextLastFragment(private var clubList:List<Club>, private var leagueId:String) : Fragment(){
+class NextLastFragment : Fragment(){
+
+    companion object{
+        private const val CLUB_LIST ="CLUB_LIST"
+        private const val LEAGUE_ID = "LEAGUE_ID"
+        fun newInstance(clubList:List<Club>,leagueId:String): NextLastFragment{
+            val args = Bundle()
+            val arrList = arrayListOf<Club>()
+            arrList.addAll(clubList)
+            args.putParcelableArrayList(CLUB_LIST, arrList)
+            args.putString(LEAGUE_ID,leagueId)
+            val fg = NextLastFragment()
+            fg.arguments = args
+            return fg
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,8 +38,13 @@ class NextLastFragment(private var clubList:List<Club>, private var leagueId:Str
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val pagerAdapter = PagerAdapter(childFragmentManager)
-        pagerAdapter.listFragment.add(EventFragment(leagueId,clubList,EventFragment.LATEST_MATCH))
-        pagerAdapter.listFragment.add(EventFragment(leagueId,clubList,EventFragment.UPCOMING_MATCH))
+        val bundle = arguments
+        if (bundle != null){
+            val lgId = bundle.getString(LEAGUE_ID)!!
+            val clubList = bundle.getParcelableArrayList<Club>(CLUB_LIST)
+            pagerAdapter.listFragment.add(EventFragment.newInstance(lgId, clubList!!,EventFragment.LATEST_MATCH))
+            pagerAdapter.listFragment.add(EventFragment.newInstance(lgId,clubList,EventFragment.UPCOMING_MATCH))
+        }
         view_pager_event.adapter = pagerAdapter
         view_pager_event.offscreenPageLimit = 2
         pagerAdapter.notifyDataSetChanged()
