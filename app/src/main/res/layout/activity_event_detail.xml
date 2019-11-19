@@ -30,7 +30,6 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
-                android:text="Arsenal vs Chelsea"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -56,7 +55,6 @@
                     android:id="@+id/time_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="14:00:00"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
@@ -73,7 +71,6 @@
                     android:id="@+id/date_event"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="2019-11-10"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -97,7 +94,6 @@
                     android:id="@+id/score_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3"
                     android:textColor="@color/colorPrimary"
                     android:textSize="26sp" />
 
@@ -106,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:text=":"
+                    android:text="@string/separator_score"
                     android:textColor="@color/colorPrimary"
                     android:textSize="26sp"
                     android:textStyle="bold" />
@@ -115,7 +111,6 @@
                     android:id="@+id/score_away"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
                     android:textColor="@color/colorPrimary"
                     android:textSize="26sp" />
             </LinearLayout>
@@ -126,7 +121,6 @@
                 android:layout_height="70dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:src="@drawable/arsenal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -136,7 +130,6 @@
                 android:layout_height="70dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
-                android:src="@drawable/chelsea"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -157,9 +150,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="Round 16"
                 android:textColor="@color/colorPrimary"
-                android:textSize="10sp" />
+                android:textSize="12sp" />
         </androidx.cardview.widget.CardView>
 
         <TextView
@@ -169,7 +161,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:text="English Premier League"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
@@ -184,7 +175,6 @@
             android:layout_marginTop="30dp"
             android:drawableStart="@drawable/ic_home_black_24dp"
             android:gravity="center"
-            android:text="Home Team"
             android:textColor="@color/colorWhite"
             app:layout_constraintStart_toStartOf="@+id/name_league"
             app:layout_constraintTop_toBottomOf="@+id/name_league" />
@@ -194,7 +184,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Arsenal"
             android:textColor="@color/colorWhite"
             app:layout_constraintStart_toStartOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -208,6 +197,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/cardView4"
             app:layout_constraintEnd_toEndOf="parent" />
 
+
         <GridLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -220,82 +210,90 @@
             app:layout_constraintStart_toEndOf="@+id/cardView4"
             app:layout_constraintTop_toTopOf="@+id/cardView2">
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/goal_details_away"
                 android:layout_width="match_parent"
+                android:textAlignment="viewEnd"
                 android:layout_height="40dp"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/red_cards_away"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
+                android:textAlignment="viewEnd"
                 android:layout_marginBottom="8dp"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/yellow_card_away"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:textAlignment="viewEnd"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/gk_away"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:textAlignment="viewEnd"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/defenser_away"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:ellipsize="end"
+                android:textAlignment="viewEnd"
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
-                android:id="@+id/mildfielder_away"
+            <com.forderation.footballclubstudio.utils.TextViewMatch
+                android:id="@+id/midfielder_away"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
+                android:textAlignment="viewEnd"
                 android:layout_marginBottom="8dp"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
-                android:id="@+id/fordwarder_away"
+            <com.forderation.footballclubstudio.utils.TextViewMatch
+                android:id="@+id/forwarder_away"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:ellipsize="end"
+                android:textAlignment="viewEnd"
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/subtitues_away"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:ellipsize="end"
+                android:textAlignment="viewEnd"
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
         </GridLayout>
@@ -312,7 +310,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/cardView2">
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/goal_details_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -320,7 +318,7 @@
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/red_cards_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -330,7 +328,7 @@
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/yellow_card_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -340,7 +338,7 @@
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/gk_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -350,7 +348,7 @@
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/defenser_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -360,7 +358,7 @@
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/mildfielder_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -370,7 +368,7 @@
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/fordwarder_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -381,7 +379,7 @@
                 android:textColor="@color/colorWhite" />
 
 
-            <TextView
+            <com.forderation.footballclubstudio.utils.TextViewMatch
                 android:id="@+id/subtitues_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -396,7 +394,6 @@
             android:id="@+id/away_team"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chelsea"
             android:layout_marginTop="10dp"
             android:textColor="@color/colorWhite"
             app:layout_constraintEnd_toEndOf="@+id/textView2"
@@ -408,7 +405,6 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_domain_black_24dp"
             android:gravity="center"
-            android:text="Away Team"
             android:textColor="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
             app:layout_constraintEnd_toEndOf="@+id/name_league"
@@ -429,7 +425,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="Goal Details" />
+                android:text="@string/goal_details" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -447,7 +443,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_margin="3dp"
-                android:text="Red Cards" />
+                android:text="@string/red_cards" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -465,7 +461,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="Yellow Cards" />
+                android:text="@string/yellow_cards" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -483,7 +479,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="Goalkeeper" />
+                android:text="@string/goalkeeper" />
         </androidx.cardview.widget.CardView>
 
 
@@ -502,7 +498,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="Defenser" />
+                android:text="@string/defender" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -520,7 +516,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="Midfielder" />
+                android:text="@string/midfielder" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -538,7 +534,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="Forwarder" />
+                android:text="@string/forwarder" />
         </androidx.cardview.widget.CardView>
 
 
@@ -559,7 +555,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="Subtitues" />
+                android:text="@string/substitutes" />
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

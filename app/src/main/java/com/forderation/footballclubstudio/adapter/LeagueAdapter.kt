@@ -42,7 +42,7 @@ class LeagueAdapter(
 
     class VHolder(itemView: View) :RecyclerView.ViewHolder(itemView) {
         private val imgLeague:ImageView = itemView.find(img_league)
-        private val titleLeague:TextView = itemView.find(desc_league)
+        private val titleLeague:TextView = itemView.find(title_league)
         private val descLeague:TextView = itemView.find(desc_league)
         private val backLeague:ImageView = itemView.find(background_league)
         fun bind(league:League, leagueListener: (League) -> Unit){

@@ -1,5 +1,7 @@
 package com.forderation.footballclubstudio.activity.presenter
 
+import android.content.Context
+import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.activity.view.LeaguesView
 import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.model.league.GetLeagues
@@ -8,8 +10,8 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import retrofit2.Call
 
-class LeaguesPresenter(private val view: LeaguesView) {
-    private val typeLeague = "Soccer"
+class LeaguesPresenter(private val view: LeaguesView, ctx: Context) {
+    private val typeLeague = ctx.resources.getString(R.string.sport_type)
     var updatedList: MutableList<League> = arrayListOf()
 
     var limitItem = 10
@@ -27,15 +29,17 @@ class LeaguesPresenter(private val view: LeaguesView) {
         view.showLoading()
         doAsync {
             val listLeagues: List<League>? = initList()
-            if(limitItem != 60){
-                for(x in 0 until limitItem){
-                    if(listLeagues?.get(x) != null){
-                        filterLeague(listLeagues[x])
+            if (limitItem != 60) {
+                for (x in 0 until limitItem) {
+                    if (listLeagues?.get(x) != null && listLeagues[x].type.equals(typeLeague)) {
+                        showLeague(listLeagues[x])
                     }
                 }
-            }else{
+            } else {
                 listLeagues?.forEach {
-                    filterLeague(it)
+                    if (it.type.equals(typeLeague)) {
+                        showLeague(it)
+                    }
                 }
             }
             uiThread {
@@ -44,17 +48,15 @@ class LeaguesPresenter(private val view: LeaguesView) {
         }
     }
 
-    private fun filterLeague(leagueOld: League){
+    private fun showLeague(leagueOld: League) {
         doAsync {
             if (leagueOld.id != null) {
                 val api = ApiClient.service.detailLeague(leagueOld.id)
-                val league:League? = api.execute().body()?.leagues?.get(0)
-                if(league!=null){
-                    if(league.type.equals(typeLeague)){
-                        updatedList.add(league)
-                        uiThread {
-                            view.addLeague(league)
-                        }
+                val league: League? = api.execute().body()?.leagues?.get(0)
+                if (league != null) {
+                    updatedList.add(league)
+                    uiThread {
+                        view.addLeague(league)
                     }
                 }
             }

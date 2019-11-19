@@ -26,7 +26,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:textAlignment="center"
-            android:text="Arsenal vs Chelsea"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -52,7 +51,6 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_access_time_black_24dp"
                 android:drawablePadding="2dp"
-                android:text="14:00:00"
                 android:textColor="@color/white" />
 
             <TextView
@@ -63,7 +61,6 @@
                 android:layout_marginStart="10dp"
                 android:drawableStart="@drawable/ic_date_range_black_24dp"
                 android:drawablePadding="2dp"
-                android:text="2019-11-10"
                 android:textColor="@color/white" />
         </LinearLayout>
 
@@ -85,11 +82,10 @@
                 android:id="@+id/score_home"
                 android:textSize="26sp"
                 android:textColor="@color/colorWhite"
-                android:text="3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
-                android:text=":"
+                android:text="@string/separator_score"
                 android:textStyle="bold"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -101,7 +97,6 @@
                 android:id="@+id/score_away"
                 android:textSize="26sp"
                 android:textColor="@color/colorWhite"
-                android:text="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -112,7 +107,6 @@
             android:layout_height="70dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/arsenal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_event" />
 
@@ -122,7 +116,6 @@
             android:layout_height="70dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/chelsea"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_event" />
 

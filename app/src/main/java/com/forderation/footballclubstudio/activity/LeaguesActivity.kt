@@ -46,12 +46,12 @@ class LeaguesActivity : AppCompatActivity(), LeaguesView {
         setContentView(R.layout.activity_leagues)
         adapter = LeagueAdapter(arrayListOf(), this) {
             val intent = Intent(applicationContext, LeagueDetailActivity::class.java)
-            intent.putExtra(LeagueDetailActivity.ADDITIONAL_INFO, it)
+            intent.putExtra(LeagueDetailActivity.LEAGUE_INTENT, it)
             startActivity(intent)
         }
         snackBar =
             Snackbar.make(swipe_layout, "Now run to get league ...", Snackbar.LENGTH_INDEFINITE)
-        presenter = LeaguesPresenter(this)
+        presenter = LeaguesPresenter(this, this)
         rv_leagues.layoutManager = GridLayoutManager(this, 2)
         rv_leagues.adapter = adapter
         swipe_layout.onRefresh {

@@ -37,7 +37,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
     }
 
     companion object {
-        const val ADDITIONAL_INFO = "ADDITIONAL_INFO"
+        const val LEAGUE_INTENT = "LEAGUE_INTENT"
     }
 
     private lateinit var clubList:List<Club>
@@ -92,7 +92,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
         presenter = DetailLeaguePresenter(this)
         rvClub.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvClub.adapter = adapter
-        league = intent.getParcelableExtra(ADDITIONAL_INFO)
+        league = intent.getParcelableExtra(LEAGUE_INTENT)
         presenter.getClubList(league?.name!!)
         Picasso.get().load(league?.getSmallTrophy()).fit().centerInside().into(trophy_league)
         desc_league.text = league?.description

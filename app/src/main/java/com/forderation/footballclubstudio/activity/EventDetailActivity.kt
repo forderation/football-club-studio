@@ -10,6 +10,8 @@ import kotlinx.android.synthetic.main.activity_event_detail.*
 
 class EventDetailActivity : AppCompatActivity() {
 
+
+
     companion object{
         const val EVENT_INTENT = "EVENT_INTENT"
         const val HOME_BADGE = "HOME_BADGE"
@@ -29,24 +31,26 @@ class EventDetailActivity : AppCompatActivity() {
         score_away.text = event.awayScore
         round_league.text = getString(R.string.round_tv).plus(event.round)
         name_league.text = event.strLeague
-        goal_details_home.text = event.strHomeGoalDetails
-        red_cards_home.text = event.strHomeRedCards
-        yellow_card_home.text = event.strHomeYellowCards
-        gk_home.text = event.strHomeLineupGoalkeeper
-        defenser_home.text = event.strHomeLineupDefense
-        mildfielder_home.text = event.strHomeLineupMidfield
-        fordwarder_home.text = event.strHomeLineupForward
-        subtitues_home.text = event.strHomeLineupSubstitutes
-        goal_details_away.text = event.strAwayGoalDetails
-        red_cards_away.text = event.strAwayRedCards
-        yellow_card_away.text = event.strAwayYellowCards
         home_team.text = event.homeTeam
         away_team.text = event.awayTeam
-        gk_away.text = event.strAwayLineupGoalkeeper
-        defenser_away.text = event.strAwayLineupDefense
-        mildfielder_away.text = event.strAwayLineupMidfield
-        fordwarder_away.text = event.strAwayLineupForward
-        subtitues_away.text = event.strAwayLineupSubstitutes
+        //home attributes
+        goal_details_home.setText(event.strHomeGoalDetails,this)
+        red_cards_home.setText(event.strHomeRedCards,this)
+        yellow_card_home.setText(event.strHomeYellowCards,this)
+        gk_home.setText(event.strHomeLineupGoalkeeper,this)
+        defenser_home.setText(event.strHomeLineupDefense,this)
+        mildfielder_home.setText(event.strHomeLineupMidfield,this)
+        fordwarder_home.setText(event.strHomeLineupForward,this)
+        subtitues_home.setText(event.strHomeLineupSubstitutes,this)
+        //away attributes
+        goal_details_away.setText(event.strAwayGoalDetails,this)
+        red_cards_away.setText(event.strAwayRedCards,this)
+        yellow_card_away.setText(event.strAwayYellowCards,this)
+        gk_away.setText(event.strAwayLineupGoalkeeper,this)
+        defenser_away.setText(event.strAwayLineupDefense,this)
+        midfielder_away.setText(event.strAwayLineupMidfield,this)
+        forwarder_away.setText(event.strAwayLineupForward,this)
+        subtitues_away.setText(event.strAwayLineupSubstitutes,this)
         Picasso.get().load(intent.getStringExtra(HOME_BADGE)).fit().centerInside().into(home_badge)
         Picasso.get().load(intent.getStringExtra(AWAY_BADGE)).fit().centerInside().into(away_badge)
         supportActionBar?.title = "Match Detail"

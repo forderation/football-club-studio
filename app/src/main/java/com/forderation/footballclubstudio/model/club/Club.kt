@@ -13,7 +13,7 @@ data class Club(
     @SerializedName("strTeamBadge")
     val badge:String?
 ) : Parcelable{
-    public fun getBadgeSmall():String{
+    fun getBadgeSmall():String{
         return badge.plus("/preview")
     }
 }
