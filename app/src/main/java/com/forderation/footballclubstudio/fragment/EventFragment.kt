@@ -59,7 +59,7 @@ class EventFragment : Fragment(),
         list_event.layoutManager = LinearLayoutManager(context)
         val bundle = arguments
         if(bundle!=null){
-            mPresenter = EventPresenter(this, bundle.getInt(TYPE_EVENT))
+            mPresenter = EventPresenter(this, bundle.getInt(TYPE_EVENT), activity!!.applicationContext)
             mPresenter.getListEventLatestMatch(bundle.getString(ID_LEAGUE)!!)
         }
     }
