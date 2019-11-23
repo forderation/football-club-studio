@@ -26,11 +26,6 @@ class ListLeagueFragment : Fragment(),LeaguesView {
     private lateinit var adapter: LeagueAdapter
     private var ctx: Context? = null
 
-    fun setLimitItem(item: Int){
-        adapter.clearAdapter()
-        presenter.limitItem = item
-    }
-
     companion object{
         const val ITEM_INTENT = "ITEM_INTENT"
         fun newInstance(ctx: Context, item: Int): ListLeagueFragment {
@@ -49,13 +44,17 @@ class ListLeagueFragment : Fragment(),LeaguesView {
 
     override fun showLoading() {
         snackBar.show()
-        progress_loading.visibility = View.VISIBLE
+        if(progress_loading != null){
+            progress_loading.visibility = View.VISIBLE
+        }
     }
 
     override fun hideLoading() {
         snackBar.dismiss()
-        progress_loading.visibility = View.INVISIBLE
-        swipe_layout.isRefreshing = false
+        if(progress_loading != null && swipe_layout != null){
+            progress_loading.visibility = View.INVISIBLE
+            swipe_layout.isRefreshing = false
+        }
     }
 
     override fun loadFail(msg: String) {

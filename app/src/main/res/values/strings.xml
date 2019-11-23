@@ -12,7 +12,7 @@
     <string name="search_hint">Search match on &#032;</string>
     <string name="loading_search">Now loading to get data</string>
     <string name="sport_type">Soccer</string>
-    <string name="round_tv">Round &#032;</string>
+    <string name="round_tv">Round :</string>
     <string name="separator_score">:</string>
     <string name="goal_details">Goal Details</string>
     <string name="red_cards">Red Cards</string>
@@ -22,4 +22,5 @@
     <string name="midfielder">Midfielder</string>
     <string name="forwarder">Forwarder</string>
     <string name="substitutes">Substitutes</string>
+    <string name="favourite">favourite</string>
 </resources>

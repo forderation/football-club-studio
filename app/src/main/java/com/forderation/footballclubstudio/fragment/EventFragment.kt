@@ -12,21 +12,31 @@ import com.forderation.footballclubstudio.activity.EventDetailActivity
 import com.forderation.footballclubstudio.activity.presenter.EventPresenter
 import com.forderation.footballclubstudio.activity.view.ListEventView
 import com.forderation.footballclubstudio.adapter.EventAdapter
+import com.forderation.footballclubstudio.adapter.FavEventAdapter
+import com.forderation.footballclubstudio.db.FavEvent
 import com.forderation.footballclubstudio.model.event.Event
 import kotlinx.android.synthetic.main.fragment_event_list.*
 
 class EventFragment : Fragment(),
     ListEventView {
 
-    companion object{
+    companion object {
         const val LATEST_MATCH = 0
         const val UPCOMING_MATCH = 1
         const val FAV_MATCH = 2
         const val ID_LEAGUE = "ID_LEAGUE"
         const val TYPE_EVENT = "TYPE_EVENT"
-        fun newInstance(idLeague:String,typeEvent:Int):EventFragment{
+        fun newInstance(idLeague: String, typeEvent: Int): EventFragment {
             val bundle = Bundle()
-            bundle.putString(ID_LEAGUE,idLeague)
+            bundle.putString(ID_LEAGUE, idLeague)
+            bundle.putInt(TYPE_EVENT, typeEvent)
+            val fg = EventFragment()
+            fg.arguments = bundle
+            return fg
+        }
+
+        fun newInstance(typeEvent: Int): EventFragment {
+            val bundle = Bundle()
             bundle.putInt(TYPE_EVENT, typeEvent)
             val fg = EventFragment()
             fg.arguments = bundle
@@ -35,13 +45,25 @@ class EventFragment : Fragment(),
     }
 
     override fun inflateListEvent(listEvent: List<Event>) {
-        mAdapter = EventAdapter(listEvent){ e ->
-            val intent = Intent(activity,EventDetailActivity::class.java)
+        mAdapter = EventAdapter(listEvent) { e, h, a ->
+            val intent = Intent(activity, EventDetailActivity::class.java)
             intent.putExtra(EventDetailActivity.EVENT_INTENT, e)
+            intent.putExtra(EventDetailActivity.HOME_BADGE_URL, h)
+            intent.putExtra(EventDetailActivity.AWAY_BADGE_URL, a)
             startActivity(intent)
         }
         list_event.layoutManager = LinearLayoutManager(context)
         list_event.adapter = mAdapter
+    }
+
+    override fun inflateEventFav(listEvent: List<FavEvent>) {
+        mAdapterFav = FavEventAdapter(listEvent) { e ->
+            val intent = Intent(activity, EventDetailActivity::class.java)
+            intent.putExtra(EventDetailActivity.EVENT_INTENT, e)
+            startActivity(intent)
+        }
+        list_event.layoutManager = LinearLayoutManager(context)
+        list_event.adapter = mAdapterFav
     }
 
     override fun onCreateView(
@@ -53,14 +75,20 @@ class EventFragment : Fragment(),
 
     private lateinit var mPresenter: EventPresenter
     private lateinit var mAdapter: EventAdapter
+    private lateinit var mAdapterFav: FavEventAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         list_event.layoutManager = LinearLayoutManager(context)
         val bundle = arguments
-        if(bundle!=null){
-            mPresenter = EventPresenter(this, bundle.getInt(TYPE_EVENT), activity!!.applicationContext)
-            mPresenter.getListEventLatestMatch(bundle.getString(ID_LEAGUE)!!)
+        if (bundle != null) {
+            val typeEvent = bundle.getInt(TYPE_EVENT)
+            mPresenter = EventPresenter(this, typeEvent, activity!!.applicationContext)
+            if (typeEvent != FAV_MATCH) {
+                mPresenter.getListEventLatestMatch(bundle.getString(ID_LEAGUE)!!)
+            } else {
+                mPresenter.getListEventFav()
+            }
         }
     }
 }

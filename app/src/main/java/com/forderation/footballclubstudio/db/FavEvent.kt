@@ -1,6 +1,10 @@
-package com.forderation.footballclubstudio.database
+package com.forderation.footballclubstudio.db
 
-class FavEventContracts(
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class FavEvent(
     val id: Long?,
     val round: String?,
     val idLeague: String?,
@@ -34,13 +38,13 @@ class FavEventContracts(
     val strAwayLineupForward: String?,
     val strAwayLineupSubstitutes: String?,
     val strAwayFormation: String?,
-    val homeBadge: ByteArray?,
-    val awayBadge: ByteArray?
-) {
+    val homeBadge: String?,
+    val awayBadge: String?
+) : Parcelable {
     companion object {
         const val TABLE_FAV_EVENT = "TABLE_FAV_EVENT"
-        const val ID = "ID"
-        const val ROUND = "ROUND"
+        const val ID = "ID_"
+        const val Round = "Round"
         const val IdLeague = "IdLeague"
         const val Name = "Name"
         const val Sport = "Sport"

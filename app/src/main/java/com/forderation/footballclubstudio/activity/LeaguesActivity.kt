@@ -3,6 +3,7 @@ package com.forderation.footballclubstudio.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.forderation.footballclubstudio.R
+import com.forderation.footballclubstudio.fragment.EventFragment
 import com.forderation.footballclubstudio.fragment.ListLeagueFragment
 import com.fxn.OnBubbleClickListener
 import kotlinx.android.synthetic.main.activity_leagues.*
@@ -10,12 +11,20 @@ import kotlinx.android.synthetic.main.activity_leagues.*
 class LeaguesActivity : AppCompatActivity() {
 
     private lateinit var leaguesFg: ListLeagueFragment
-
+    private lateinit var favEventFg: EventFragment
     private fun showFgLeagues(item:Int = 10){
         leaguesFg = ListLeagueFragment.newInstance(this, item)
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.frame_container, leaguesFg, ListLeagueFragment::class.java.simpleName)
+            .commit()
+    }
+
+    private fun showFgFavEvent(){
+        favEventFg = EventFragment.newInstance(EventFragment.FAV_MATCH)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.frame_container, favEventFg, EventFragment::class.java.simpleName)
             .commit()
     }
 
@@ -35,6 +44,9 @@ class LeaguesActivity : AppCompatActivity() {
                     }
                     R.id.item_60 -> {
                         showFgLeagues(60)
+                    }
+                    R.id.item_fav -> {
+                        showFgFavEvent()
                     }
                 }
                 currentItemId = id
