@@ -42,7 +42,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
 
     override fun showListClub(clubList: List<Club>) {
         adapter.clubList = clubList.toMutableList()
-        mAdapter = EventAdapter(arrayListOf()){ e ->
+        mAdapter = EventAdapter(arrayListOf()){ e,h,a ->
             val intent = Intent(this,EventDetailActivity::class.java)
             intent.putExtra(EventDetailActivity.EVENT_INTENT,e)
             startActivity(intent)

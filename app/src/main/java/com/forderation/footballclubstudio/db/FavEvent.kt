@@ -7,6 +7,7 @@ import kotlinx.android.parcel.Parcelize
 data class FavEvent(
     val id: Long?,
     val round: String?,
+    val idMatch: String?,
     val idLeague: String?,
     val name: String?,
     val strSport: String?,
@@ -45,6 +46,7 @@ data class FavEvent(
         const val TABLE_FAV_EVENT = "TABLE_FAV_EVENT"
         const val ID = "ID_"
         const val Round = "Round"
+        const val IdMatch = "IdMatch"
         const val IdLeague = "IdLeague"
         const val Name = "Name"
         const val Sport = "Sport"
@@ -78,5 +80,11 @@ data class FavEvent(
         const val AwayFormation = "AwayFormation"
         const val HomeBadge = "HomeBadge"
         const val AwayBadge = "AwayBadge"
+    }
+    fun getHomeBadgeSmall():String{
+        return homeBadge.plus("/preview")
+    }
+    fun getAwayBadgeSmall():String{
+        return awayBadge.plus("/preview")
     }
 }

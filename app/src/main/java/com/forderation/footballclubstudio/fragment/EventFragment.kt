@@ -57,7 +57,7 @@ class EventFragment : Fragment(),
     }
 
     override fun inflateEventFav(listEvent: List<FavEvent>) {
-        mAdapterFav = FavEventAdapter(listEvent) { e ->
+        mAdapterFav = FavEventAdapter(listEvent) { e,h,a ->
             val intent = Intent(activity, EventDetailActivity::class.java)
             intent.putExtra(EventDetailActivity.EVENT_INTENT, e)
             startActivity(intent)

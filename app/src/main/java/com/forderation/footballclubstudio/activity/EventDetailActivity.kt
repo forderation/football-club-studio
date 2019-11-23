@@ -2,6 +2,7 @@ package com.forderation.footballclubstudio.activity
 
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -19,6 +20,8 @@ import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class EventDetailActivity : AppCompatActivity() {
 
@@ -38,6 +41,7 @@ class EventDetailActivity : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.option_menu_match, menu)
         favMenu = menu?.getItem(0)
+        updateIcon()
         return true
     }
 
@@ -50,12 +54,15 @@ class EventDetailActivity : AppCompatActivity() {
         }
     }
 
+    private lateinit var homeImgUrl: String
+    private lateinit var awayImgUrl: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_detail)
         mEvent = intent.getParcelableExtra(EVENT_INTENT)!!
-        val homeImgUrl = intent.getStringExtra(HOME_BADGE_URL)
-        val awayImgUrl = intent.getStringExtra(AWAY_BADGE_URL)
+        homeImgUrl = intent.getStringExtra(HOME_BADGE_URL)!!
+        awayImgUrl = intent.getStringExtra(AWAY_BADGE_URL)!!
         Picasso.get()
             .load(homeImgUrl)
             .placeholder(R.drawable.progress_animation)
@@ -104,10 +111,11 @@ class EventDetailActivity : AppCompatActivity() {
         database.use {
             val result = select(FavEvent.TABLE_FAV_EVENT)
                 .whereArgs(
-                    "(${FavEvent.IdLeague} = $id)"
+                    "(IdMatch = {id})",
+                    "id" to id
                 )
-            val fav = result.parseList(classParser<FavEvent>())
-            if (fav.isNotEmpty()) isFav = true
+            val favourites = result.parseList(classParser<FavEvent>())
+            isFav = favourites.isNotEmpty()
         }
     }
 
@@ -116,6 +124,8 @@ class EventDetailActivity : AppCompatActivity() {
             database.use {
                 insert(
                     FavEvent.TABLE_FAV_EVENT,
+                    FavEvent.IdMatch to mEvent.id,
+                    FavEvent.IdLeague to mEvent.idLeague,
                     FavEvent.Name to mEvent.name,
                     FavEvent.Time to mEvent.time,
                     FavEvent.Date to mEvent.date,
@@ -140,7 +150,9 @@ class EventDetailActivity : AppCompatActivity() {
                     FavEvent.AwayLineupDefense to mEvent.strAwayLineupDefense,
                     FavEvent.AwayLineupMidfield to mEvent.strAwayLineupMidfield,
                     FavEvent.AwayLineupForward to mEvent.strAwayLineupForward,
-                    FavEvent.AwayLineupSubstitutes to mEvent.strAwayLineupSubstitutes
+                    FavEvent.AwayLineupSubstitutes to mEvent.strAwayLineupSubstitutes,
+                    FavEvent.HomeBadge to homeImgUrl,
+                    FavEvent.AwayBadge to awayImgUrl
                 )
             }
             root_layout.snackbar("Added to favorite").show()
@@ -174,7 +186,7 @@ class EventDetailActivity : AppCompatActivity() {
     private fun removeFromFav() {
         try {
             database.use {
-                delete(FavEvent.TABLE_FAV_EVENT, "${FavEvent.IdLeague} = $id")
+                delete(FavEvent.TABLE_FAV_EVENT, "${FavEvent.IdMatch} = $id")
             }
             root_layout.longSnackbar("Match removed from favourite").show()
             isFav = false

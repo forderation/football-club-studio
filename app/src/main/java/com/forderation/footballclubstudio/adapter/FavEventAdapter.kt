@@ -1,7 +1,6 @@
 package com.forderation.footballclubstudio.adapter
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,22 +11,16 @@ import com.forderation.footballclubstudio.db.FavEvent
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.find
-import java.io.ByteArrayOutputStream
 
 class FavEventAdapter(
     private var eventList: List<FavEvent>,
-    private val mListener: (FavEvent) -> Unit
+    private val mListener: (FavEvent, String, String) -> Unit
 ) : RecyclerView.Adapter<FavEventAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_event, parent, false)
         return ViewHolder(view)
-    }
-
-    fun setEventList(newList: List<FavEvent>) {
-        eventList = newList
-        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -48,14 +41,14 @@ class FavEventAdapter(
 
         fun bind(
             mEvent: FavEvent,
-            mListener: (FavEvent) -> Unit
+            mListener: (FavEvent, String, String) -> Unit
         ) {
             titleEvent.text = mEvent.name
             scoreHome.text = mEvent.homeScore
             scoreAway.text = mEvent.awayScore
             timeEvent.text = mEvent.time
             dateEvent.text = mEvent.date
-            mView.setOnClickListener { mListener(mEvent) }
+            mView.setOnClickListener { mListener(mEvent, mEvent.homeBadge!!, mEvent.awayBadge!!) }
             Picasso.get()
                 .load(mEvent.homeBadge)
                 .placeholder(R.drawable.progress_animation)
