@@ -22,7 +22,4 @@
     <string name="midfielder">Midfielder</string>
     <string name="forwarder">Forwarder</string>
     <string name="substitutes">Substitutes</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

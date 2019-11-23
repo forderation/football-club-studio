@@ -11,15 +11,12 @@ class LeaguesActivity : AppCompatActivity() {
 
     private lateinit var leaguesFg: ListLeagueFragment
 
-    private fun showFgLeagues(){
-        leaguesFg = ListLeagueFragment.newInstance(this)
-        val fragment = supportFragmentManager.findFragmentByTag(ListLeagueFragment::class.java.simpleName)
-        if (fragment !is ListLeagueFragment){
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.frame_container, leaguesFg, ListLeagueFragment::class.java.simpleName)
-                .commit()
-        }
+    private fun showFgLeagues(item:Int = 10){
+        leaguesFg = ListLeagueFragment.newInstance(this, item)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.frame_container, leaguesFg, ListLeagueFragment::class.java.simpleName)
+            .commit()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,13 +28,13 @@ class LeaguesActivity : AppCompatActivity() {
                 if(currentItemId != null && id == currentItemId) return
                 when(id){
                     R.id.item_10 -> {
-                        leaguesFg.setLimitItem(10)
+                        showFgLeagues()
                     }
                     R.id.item_30 -> {
-                        leaguesFg.setLimitItem(30)
+                        showFgLeagues(30)
                     }
                     R.id.item_60 -> {
-                        leaguesFg.setLimitItem(60)
+                        showFgLeagues(60)
                     }
                 }
                 currentItemId = id

@@ -32,9 +32,13 @@ class ListLeagueFragment : Fragment(),LeaguesView {
     }
 
     companion object{
-        fun newInstance(ctx: Context): ListLeagueFragment {
+        const val ITEM_INTENT = "ITEM_INTENT"
+        fun newInstance(ctx: Context, item: Int): ListLeagueFragment {
+            val bundle = Bundle()
+            bundle.putInt(ITEM_INTENT, item)
             val fg = ListLeagueFragment()
             fg.ctx = ctx
+            fg.arguments = bundle
             return fg
         }
     }
@@ -77,7 +81,12 @@ class ListLeagueFragment : Fragment(),LeaguesView {
         presenter = LeaguesPresenter(this, ctx!!)
         rv_leagues.layoutManager = GridLayoutManager(ctx, 2)
         rv_leagues.adapter = adapter
-        presenter.getLeagues()
+        val bundle = arguments
+        if(bundle != null){
+            presenter.limitItem = bundle.getInt(ITEM_INTENT,10)
+        }else{
+            presenter.getLeagues()
+        }
         swipe_layout.onRefresh {
             adapter.clearAdapter()
             presenter.getLeagues()
