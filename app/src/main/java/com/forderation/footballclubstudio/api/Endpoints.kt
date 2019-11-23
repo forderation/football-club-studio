@@ -18,6 +18,9 @@ interface Endpoints {
     @GET("api/v1/json/1/search_all_teams.php?")
     fun listClub(@Query("l") nameLeague: String): Call<GetTeams>
 
+    @GET("api/v1/json/1/lookupteam.php?")
+    fun detailTeam(@Query("id") idTeam: String): Call<GetTeams>
+
     @GET("api/v1/json/1/eventspastleague.php?")
     fun listPastEvent(@Query("id") idLeague: String): Call<GetEvents>
 

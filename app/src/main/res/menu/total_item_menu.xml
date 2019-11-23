@@ -13,13 +13,20 @@
         android:id="@+id/item_30"
         android:iconTint="@color/colorWhite"
         android:icon="@drawable/ic_replay_30_black_24dp"
-        android:title="less than 30 item"
+        android:title="less than 30"
         tools:targetApi="o" />
 
     <item
         android:id="@+id/item_60"
         android:iconTint="@color/colorWhite"
         android:icon="@drawable/ic_expand_more_black_24dp"
-        android:title="more than 60 item"
+        android:title="more than 60"
+        tools:targetApi="o" />
+
+    <item
+        android:id="@+id/item_fav"
+        android:iconTint="@color/colorWhite"
+        android:icon="@drawable/ic_favorite_black_24dp"
+        android:title="fav match"
         tools:targetApi="o" />
 </menu>

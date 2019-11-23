@@ -13,13 +13,9 @@ import kotlinx.android.synthetic.main.fragment_next_last_match.*
 class NextLastFragment : Fragment(){
 
     companion object{
-        private const val CLUB_LIST ="CLUB_LIST"
         private const val LEAGUE_ID = "LEAGUE_ID"
-        fun newInstance(clubList:List<Club>,leagueId:String): NextLastFragment{
+        fun newInstance(leagueId:String): NextLastFragment{
             val args = Bundle()
-            val arrList = arrayListOf<Club>()
-            arrList.addAll(clubList)
-            args.putParcelableArrayList(CLUB_LIST, arrList)
             args.putString(LEAGUE_ID,leagueId)
             val fg = NextLastFragment()
             fg.arguments = args
@@ -41,9 +37,8 @@ class NextLastFragment : Fragment(){
         val bundle = arguments
         if (bundle != null){
             val lgId = bundle.getString(LEAGUE_ID)!!
-            val clubList = bundle.getParcelableArrayList<Club>(CLUB_LIST)
-            pagerAdapter.listFragment.add(EventFragment.newInstance(lgId, clubList!!,EventFragment.LATEST_MATCH))
-            pagerAdapter.listFragment.add(EventFragment.newInstance(lgId,clubList,EventFragment.UPCOMING_MATCH))
+            pagerAdapter.listFragment.add(EventFragment.newInstance(lgId, EventFragment.LATEST_MATCH))
+            pagerAdapter.listFragment.add(EventFragment.newInstance(lgId, EventFragment.UPCOMING_MATCH))
         }
         view_pager_event.adapter = pagerAdapter
         view_pager_event.offscreenPageLimit = 2

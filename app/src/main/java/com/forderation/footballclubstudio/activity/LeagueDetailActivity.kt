@@ -40,23 +40,18 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
         const val LEAGUE_INTENT = "LEAGUE_INTENT"
     }
 
-    private lateinit var clubList:List<Club>
-
     override fun showListClub(clubList: List<Club>) {
-        this.clubList = clubList
         adapter.clubList = clubList.toMutableList()
-        mAdapter = EventAdapter(arrayListOf(),clubList){ e, h, a ->
+        mAdapter = EventAdapter(arrayListOf()){ e ->
             val intent = Intent(this,EventDetailActivity::class.java)
             intent.putExtra(EventDetailActivity.EVENT_INTENT,e)
-            intent.putExtra(EventDetailActivity.HOME_BADGE,h)
-            intent.putExtra(EventDetailActivity.AWAY_BADGE,a)
             startActivity(intent)
         }
         showFgNextLastEvent()
     }
 
     private fun showFgNextLastEvent(){
-        val fg = NextLastFragment.newInstance(clubList,league?.id!!)
+        val fg = NextLastFragment.newInstance(league?.id!!)
         val fragment = fragmentManager.findFragmentByTag(NextLastFragment::class.java.simpleName)
         if (fragment !is NextLastFragment){
             fragmentManager

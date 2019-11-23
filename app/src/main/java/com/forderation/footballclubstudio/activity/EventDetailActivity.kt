@@ -14,8 +14,6 @@ class EventDetailActivity : AppCompatActivity() {
 
     companion object{
         const val EVENT_INTENT = "EVENT_INTENT"
-        const val HOME_BADGE = "HOME_BADGE"
-        const val AWAY_BADGE = "AWAY_BADGE"
     }
 
     private lateinit var event: Event
@@ -51,8 +49,6 @@ class EventDetailActivity : AppCompatActivity() {
         midfielder_away.setText(event.strAwayLineupMidfield,this)
         forwarder_away.setText(event.strAwayLineupForward,this)
         subtitues_away.setText(event.strAwayLineupSubstitutes,this)
-        Picasso.get().load(intent.getStringExtra(HOME_BADGE)).fit().centerInside().into(home_badge)
-        Picasso.get().load(intent.getStringExtra(AWAY_BADGE)).fit().centerInside().into(away_badge)
         supportActionBar?.title = "Match Detail"
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

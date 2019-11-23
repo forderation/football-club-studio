@@ -1,21 +1,27 @@
 package com.forderation.footballclubstudio.adapter
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.forderation.footballclubstudio.R
-import com.forderation.footballclubstudio.model.club.Club
+import com.forderation.footballclubstudio.api.ApiClient
+import com.forderation.footballclubstudio.model.club.GetTeams
 import com.forderation.footballclubstudio.model.event.Event
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
+import org.jetbrains.anko.uiThread
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class EventAdapter(
     private var eventList: List<Event>,
-    private val clubList: List<Club>,
-    private val mListener: (Event, String, String) -> Unit
+    private val mListener: (Event) -> Unit
 ) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,7 +36,7 @@ class EventAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(eventList[position],clubList,mListener)
+        holder.bind(eventList[position],mListener)
     }
 
     override fun getItemCount(): Int = eventList.size
@@ -47,26 +53,52 @@ class EventAdapter(
 
         fun bind(
             mEvent: Event,
-            clubList: List<Club>,
-            mListener: (Event, String, String) -> Unit
+            mListener: (Event) -> Unit
         ) {
             titleEvent.text = mEvent.name
             scoreHome.text = mEvent.homeScore
             scoreAway.text = mEvent.awayScore
             timeEvent.text = mEvent.time
             dateEvent.text = mEvent.date
-            var homeBadgeUrl: String? = ""
-            var awayBadgeUrl: String? = ""
-            clubList.forEach {
-                if(it.id.equals(mEvent.idHome)){
-                    Picasso.get().load(it.badge).fit().centerInside().into(homeBadge)
-                    homeBadgeUrl = it.badge
-                }else if(it.id.equals(mEvent.idAway)){
-                    Picasso.get().load(it.badge).fit().centerInside().into(awayBadge)
-                    awayBadgeUrl = it.badge
-                }
+            mView.setOnClickListener { mListener(mEvent) }
+            val homeTeams = ApiClient.service.detailTeam(mEvent.idHome!!)
+            val awayTeams = ApiClient.service.detailTeam(mEvent.idAway!!)
+            doAsync {
+                homeTeams.enqueue(object : Callback<GetTeams> {
+                    override fun onFailure(call: Call<GetTeams>, t: Throwable) {
+                        Snackbar
+                            .make(mView,"Error load data please check your connection",Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
+                    override fun onResponse(call: Call<GetTeams>, response: Response<GetTeams>) {
+                        val teams = response.body()!!.clubs[0]
+                        uiThread {
+                            Picasso.get()
+                                .load(teams.getBadgeSmall())
+                                .placeholder(R.drawable.progress_animation)
+                                .error(R.drawable.image_failed)
+                                .into(homeBadge)
+                        }
+                    }
+                })
+               awayTeams.enqueue(object : Callback<GetTeams>{
+                   override fun onFailure(call: Call<GetTeams>, t: Throwable) {
+                       Snackbar
+                           .make(mView,"Error load data please check your connection",Snackbar.LENGTH_SHORT)
+                           .show()
+                   }
+                   override fun onResponse(call: Call<GetTeams>, response: Response<GetTeams>) {
+                       val teams = response.body()!!.clubs[0]
+                       uiThread {
+                           Picasso.get()
+                               .load(teams.getBadgeSmall())
+                               .placeholder(R.drawable.progress_animation)
+                               .error(R.drawable.image_failed)
+                               .into(awayBadge)
+                       }
+                   }
+               })
             }
-            mView.setOnClickListener { mListener(mEvent,homeBadgeUrl!!,awayBadgeUrl!!) }
         }
     }
 }
