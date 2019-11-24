@@ -42,9 +42,11 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
 
     override fun showListClub(clubList: List<Club>) {
         adapter.clubList = clubList.toMutableList()
-        mAdapter = EventAdapter(arrayListOf()){ e,h,a ->
+        mEventAdapter = EventAdapter(arrayListOf()){ e, h, a ->
             val intent = Intent(this,EventDetailActivity::class.java)
             intent.putExtra(EventDetailActivity.EVENT_INTENT,e)
+            intent.putExtra(EventDetailActivity.HOME_BADGE_URL,h)
+            intent.putExtra(EventDetailActivity.AWAY_BADGE_URL,a)
             startActivity(intent)
         }
         showFgNextLastEvent()
@@ -63,7 +65,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
 
     private fun showFgEventSearchResult(){
         val fg = ResultEventFragment()
-        fg.adapter = mAdapter
+        fg.adapter = mEventAdapter
         val fragment = fragmentManager.findFragmentByTag(ResultEventFragment::class.java.simpleName)
         if (fragment !is ResultEventFragment){
             fragmentManager
@@ -103,7 +105,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
                 val listEvent = it.filter { e ->
                     e.strSport.equals(getString(R.string.sport_type)) && e.idLeague.equals(league?.id)
                 }.toMutableList()
-                mAdapter.setEventList(listEvent)
+                mEventAdapter.setEventList(listEvent)
             }
         })
         viewModel.onResponse().observe(this, Observer {
@@ -120,7 +122,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
 
     private lateinit var snackbar: Snackbar
 
-    private lateinit var mAdapter: EventAdapter
+    private lateinit var mEventAdapter: EventAdapter
 
     private lateinit var viewModel:EventViewModel
 

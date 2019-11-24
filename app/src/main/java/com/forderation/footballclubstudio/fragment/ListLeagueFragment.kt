@@ -76,7 +76,7 @@ class ListLeagueFragment : Fragment(),LeaguesView {
             startActivity(intent)
         }
         snackBar =
-            Snackbar.make(swipe_layout, "Now run to get league ...", Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(swipe_layout, getString(R.string.loading_leagues), Snackbar.LENGTH_INDEFINITE)
         presenter = LeaguesPresenter(this, ctx!!)
         rv_leagues.layoutManager = GridLayoutManager(ctx, 2)
         rv_leagues.adapter = adapter

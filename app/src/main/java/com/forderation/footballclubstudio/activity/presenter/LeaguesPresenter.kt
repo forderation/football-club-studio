@@ -12,7 +12,7 @@ import retrofit2.Call
 
 class LeaguesPresenter(private val view: LeaguesView, ctx: Context) {
     private val typeLeague = ctx.resources.getString(R.string.sport_type)
-    var updatedList: MutableList<League> = arrayListOf()
+    private var updatedList: MutableList<League> = arrayListOf()
 
     var limitItem = 10
         set(value) {

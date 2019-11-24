@@ -1,14 +1,15 @@
 package com.forderation.footballclubstudio.db
 
 import android.os.Parcelable
+import com.forderation.footballclubstudio.model.event.Event
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class FavEvent(
     val id: Long?,
-    val round: String?,
-    val idMatch: String?,
+    val idEvent: String?,
     val idLeague: String?,
+    val round: String?,
     val name: String?,
     val strSport: String?,
     val date: String?,
@@ -45,9 +46,9 @@ data class FavEvent(
     companion object {
         const val TABLE_FAV_EVENT = "TABLE_FAV_EVENT"
         const val ID = "ID_"
-        const val Round = "Round"
-        const val IdMatch = "IdMatch"
+        const val IdEvent = "IdEvent"
         const val IdLeague = "IdLeague"
+        const val Round = "Round"
         const val Name = "Name"
         const val Sport = "Sport"
         const val Date = "Date"
@@ -81,10 +82,40 @@ data class FavEvent(
         const val HomeBadge = "HomeBadge"
         const val AwayBadge = "AwayBadge"
     }
-    fun getHomeBadgeSmall():String{
-        return homeBadge.plus("/preview")
-    }
-    fun getAwayBadgeSmall():String{
-        return awayBadge.plus("/preview")
-    }
 }
+
+fun FavEvent.toEvent() = Event(
+    idEvent = idEvent,
+    name = name,
+    time = time,
+    date = date,
+    homeScore = homeScore,
+    awayScore = awayScore,
+    round = round,
+    strLeague = strLeague,
+    homeTeam = homeTeam,
+    awayTeam = awayTeam,
+    strHomeGoalDetails = strHomeGoalDetails,
+    strHomeRedCards = strHomeRedCards,
+    strHomeYellowCards = strHomeYellowCards,
+    strHomeLineupGoalkeeper = strHomeLineupGoalkeeper,
+    strHomeLineupDefense = strHomeLineupDefense,
+    strHomeLineupMidfield = strHomeLineupMidfield,
+    strHomeLineupForward = strHomeLineupForward,
+    strHomeLineupSubstitutes = strHomeLineupSubstitutes,
+    strAwayGoalDetails = strAwayGoalDetails,
+    strAwayRedCards = strAwayRedCards,
+    strAwayYellowCards = strAwayYellowCards,
+    strAwayLineupGoalkeeper = strAwayLineupGoalkeeper,
+    strAwayLineupDefense = strAwayLineupDefense,
+    strAwayLineupMidfield = strAwayLineupMidfield,
+    strAwayLineupForward = strAwayLineupForward,
+    strAwayLineupSubstitutes = strAwayLineupSubstitutes,
+    strHomeFormation = strHomeFormation,
+    strAwayFormation = strAwayFormation,
+    idLeague = idLeague,
+    thumbnail = thumbnail,
+    idAway = idAway,
+    idHome = idHome,
+    strSport = strSport
+)

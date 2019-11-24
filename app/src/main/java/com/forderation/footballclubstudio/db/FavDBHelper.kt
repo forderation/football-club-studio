@@ -21,7 +21,7 @@ class FavDBHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "fcs_database.db"
         db.createTable(
             FavEvent.TABLE_FAV_EVENT, true,
             FavEvent.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
-            FavEvent.IdMatch to TEXT,
+            FavEvent.IdEvent to TEXT,
             FavEvent.IdLeague to TEXT,
             FavEvent.Round to TEXT,
             FavEvent.Name to TEXT,
@@ -64,5 +64,5 @@ class FavDBHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "fcs_database.db"
     }
 }
 
-public val Context.database: FavDBHelper
+val Context.database: FavDBHelper
     get() = FavDBHelper.getInstance(applicationContext)

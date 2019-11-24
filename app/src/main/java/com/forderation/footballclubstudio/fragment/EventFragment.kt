@@ -1,5 +1,6 @@
 package com.forderation.footballclubstudio.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.forderation.footballclubstudio.activity.view.ListEventView
 import com.forderation.footballclubstudio.adapter.EventAdapter
 import com.forderation.footballclubstudio.adapter.FavEventAdapter
 import com.forderation.footballclubstudio.db.FavEvent
+import com.forderation.footballclubstudio.db.toEvent
 import com.forderation.footballclubstudio.model.event.Event
 import kotlinx.android.synthetic.main.fragment_event_list.*
 
@@ -26,6 +28,7 @@ class EventFragment : Fragment(),
         const val FAV_MATCH = 2
         const val ID_LEAGUE = "ID_LEAGUE"
         const val TYPE_EVENT = "TYPE_EVENT"
+        const val REQUEST_UPDATE_FAV = 4
         fun newInstance(idLeague: String, typeEvent: Int): EventFragment {
             val bundle = Bundle()
             bundle.putString(ID_LEAGUE, idLeague)
@@ -56,11 +59,21 @@ class EventFragment : Fragment(),
         list_event.adapter = mAdapter
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == REQUEST_UPDATE_FAV){
+            if(resultCode == Activity.RESULT_OK){
+                mPresenter.getListEventFav()
+            }
+        }
+    }
+
     override fun inflateEventFav(listEvent: List<FavEvent>) {
         mAdapterFav = FavEventAdapter(listEvent) { e,h,a ->
             val intent = Intent(activity, EventDetailActivity::class.java)
-            intent.putExtra(EventDetailActivity.EVENT_INTENT, e)
-            startActivity(intent)
+            intent.putExtra(EventDetailActivity.EVENT_INTENT, e.toEvent())
+            intent.putExtra(EventDetailActivity.HOME_BADGE_URL, h)
+            intent.putExtra(EventDetailActivity.AWAY_BADGE_URL, a)
+            startActivityForResult(intent, REQUEST_UPDATE_FAV)
         }
         list_event.layoutManager = LinearLayoutManager(context)
         list_event.adapter = mAdapterFav

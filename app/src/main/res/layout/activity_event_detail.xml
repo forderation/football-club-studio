@@ -139,7 +139,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView10"
+            android:id="@+id/cardViewRound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="120dp"
@@ -257,7 +257,7 @@
                 android:textColor="@color/colorWhite" />
 
             <com.forderation.footballclubstudio.utils.TextViewMatch
-                android:id="@+id/defenser_away"
+                android:id="@+id/defender_away"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
@@ -289,9 +289,19 @@
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
+            <com.forderation.footballclubstudio.utils.TextViewMatch
+                android:id="@+id/formation_away"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:textAlignment="viewEnd"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/colorWhite" />
 
             <com.forderation.footballclubstudio.utils.TextViewMatch
-                android:id="@+id/subtitues_away"
+                android:id="@+id/substitutes_away"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
@@ -353,7 +363,7 @@
                 android:textColor="@color/colorWhite" />
 
             <com.forderation.footballclubstudio.utils.TextViewMatch
-                android:id="@+id/defenser_home"
+                android:id="@+id/defender_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
@@ -363,7 +373,7 @@
                 android:textColor="@color/colorWhite" />
 
             <com.forderation.footballclubstudio.utils.TextViewMatch
-                android:id="@+id/mildfielder_home"
+                android:id="@+id/midfielder_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
@@ -373,7 +383,7 @@
                 android:textColor="@color/colorWhite" />
 
             <com.forderation.footballclubstudio.utils.TextViewMatch
-                android:id="@+id/fordwarder_home"
+                android:id="@+id/forwarder_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
@@ -382,9 +392,18 @@
                 android:maxLines="2"
                 android:textColor="@color/colorWhite" />
 
+            <com.forderation.footballclubstudio.utils.TextViewMatch
+                android:id="@+id/formation_home"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/colorWhite" />
 
             <com.forderation.footballclubstudio.utils.TextViewMatch
-                android:id="@+id/subtitues_home"
+                android:id="@+id/substitutes_home"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
@@ -541,9 +560,27 @@
                 android:text="@string/forwarder" />
         </androidx.cardview.widget.CardView>
 
-
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView8">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/formation" />
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -552,7 +589,7 @@
             android:layout_marginBottom="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView8">
+            app:layout_constraintTop_toBottomOf="@+id/cardView9">
 
             <TextView
                 android:layout_width="wrap_content"

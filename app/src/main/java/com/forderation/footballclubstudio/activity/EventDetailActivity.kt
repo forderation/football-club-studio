@@ -1,8 +1,9 @@
 package com.forderation.footballclubstudio.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -19,17 +20,14 @@ import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import org.jetbrains.anko.design.longSnackbar
-import org.jetbrains.anko.design.snackbar
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 class EventDetailActivity : AppCompatActivity() {
 
     companion object {
         const val EVENT_INTENT = "EVENT_INTENT"
-        const val TYPE_EVENT = "TYPE_EVENT"
         const val HOME_BADGE_URL = "HOME_BADGE_URL"
         const val AWAY_BADGE_URL = "AWAY_BADGE_URL"
+        const val IS_FAV_CHANGE = "IS_FAV_CHANGE"
     }
 
     private lateinit var mEvent: Event
@@ -63,23 +61,25 @@ class EventDetailActivity : AppCompatActivity() {
         mEvent = intent.getParcelableExtra(EVENT_INTENT)!!
         homeImgUrl = intent.getStringExtra(HOME_BADGE_URL)!!
         awayImgUrl = intent.getStringExtra(AWAY_BADGE_URL)!!
-        Picasso.get()
-            .load(homeImgUrl)
-            .placeholder(R.drawable.progress_animation)
-            .error(R.drawable.image_failed)
-            .into(home_badge)
-        Picasso.get()
-            .load(awayImgUrl)
-            .placeholder(R.drawable.progress_animation)
-            .error(R.drawable.image_failed)
-            .into(away_badge)
-        id = mEvent.id!!
+        if (homeImgUrl.isNotEmpty() && awayImgUrl.isNotEmpty()) {
+            Picasso.get()
+                .load(homeImgUrl)
+                .placeholder(R.drawable.progress_animation)
+                .error(R.drawable.image_failed)
+                .into(home_badge)
+            Picasso.get()
+                .load(awayImgUrl)
+                .placeholder(R.drawable.progress_animation)
+                .error(R.drawable.image_failed)
+                .into(away_badge)
+        }
+        id = mEvent.idEvent!!
         title_event.text = mEvent.name
         time_event.text = mEvent.time
         date_event.text = mEvent.date
         score_home.text = mEvent.homeScore
         score_away.text = mEvent.awayScore
-        round_league.text =getString(R.string.round_tv).plus(mEvent.round)
+        round_league.text = getString(R.string.round_tv).plus(mEvent.round)
         name_league.text = mEvent.strLeague
         home_team.text = mEvent.homeTeam
         away_team.text = mEvent.awayTeam
@@ -88,19 +88,21 @@ class EventDetailActivity : AppCompatActivity() {
         red_cards_home.setText(mEvent.strHomeRedCards, this)
         yellow_card_home.setText(mEvent.strHomeYellowCards, this)
         gk_home.setText(mEvent.strHomeLineupGoalkeeper, this)
-        defenser_home.setText(mEvent.strHomeLineupDefense, this)
-        mildfielder_home.setText(mEvent.strHomeLineupMidfield, this)
-        fordwarder_home.setText(mEvent.strHomeLineupForward, this)
-        subtitues_home.setText(mEvent.strHomeLineupSubstitutes, this)
+        defender_home.setText(mEvent.strHomeLineupDefense, this)
+        midfielder_home.setText(mEvent.strHomeLineupMidfield, this)
+        forwarder_home.setText(mEvent.strHomeLineupForward, this)
+        substitutes_home.setText(mEvent.strHomeLineupSubstitutes, this)
+        formation_home.setText(mEvent.strHomeFormation, this)
         //away attributes
         goal_details_away.setText(mEvent.strAwayGoalDetails, this)
         red_cards_away.setText(mEvent.strAwayRedCards, this)
         yellow_card_away.setText(mEvent.strAwayYellowCards, this)
         gk_away.setText(mEvent.strAwayLineupGoalkeeper, this)
-        defenser_away.setText(mEvent.strAwayLineupDefense, this)
+        defender_away.setText(mEvent.strAwayLineupDefense, this)
         midfielder_away.setText(mEvent.strAwayLineupMidfield, this)
         forwarder_away.setText(mEvent.strAwayLineupForward, this)
-        subtitues_away.setText(mEvent.strAwayLineupSubstitutes, this)
+        substitutes_away.setText(mEvent.strAwayLineupSubstitutes, this)
+        formation_away.setText(mEvent.strAwayFormation, this)
         supportActionBar?.title = "Match Detail"
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -111,8 +113,8 @@ class EventDetailActivity : AppCompatActivity() {
         database.use {
             val result = select(FavEvent.TABLE_FAV_EVENT)
                 .whereArgs(
-                    "(IdMatch = {id})",
-                    "id" to id
+                    "(IdEvent = {idEvent})",
+                    "idEvent" to id
                 )
             val favourites = result.parseList(classParser<FavEvent>())
             isFav = favourites.isNotEmpty()
@@ -124,15 +126,15 @@ class EventDetailActivity : AppCompatActivity() {
             database.use {
                 insert(
                     FavEvent.TABLE_FAV_EVENT,
-                    FavEvent.IdMatch to mEvent.id,
                     FavEvent.IdLeague to mEvent.idLeague,
+                    FavEvent.IdEvent to id,
                     FavEvent.Name to mEvent.name,
                     FavEvent.Time to mEvent.time,
                     FavEvent.Date to mEvent.date,
                     FavEvent.HomeScore to mEvent.homeScore,
                     FavEvent.AwayScore to mEvent.awayScore,
                     FavEvent.Round to mEvent.round,
-                    FavEvent.League to mEvent.name,
+                    FavEvent.League to mEvent.strLeague,
                     FavEvent.HomeTeam to mEvent.homeTeam,
                     FavEvent.AwayTeam to mEvent.awayTeam,
                     FavEvent.HomeGoalDetails to mEvent.strHomeGoalDetails,
@@ -152,10 +154,14 @@ class EventDetailActivity : AppCompatActivity() {
                     FavEvent.AwayLineupForward to mEvent.strAwayLineupForward,
                     FavEvent.AwayLineupSubstitutes to mEvent.strAwayLineupSubstitutes,
                     FavEvent.HomeBadge to homeImgUrl,
-                    FavEvent.AwayBadge to awayImgUrl
+                    FavEvent.AwayBadge to awayImgUrl,
+                    FavEvent.HomeFormation to mEvent.strHomeFormation,
+                    FavEvent.AwayFormation to mEvent.strAwayFormation,
+                    FavEvent.IdHome to mEvent.idHome,
+                    FavEvent.IdAway to mEvent.idAway
                 )
             }
-            root_layout.snackbar("Added to favorite").show()
+            root_layout.longSnackbar(getString(R.string.fav_added)).show()
             isFav = true
             updateIcon()
         } catch (e: SQLiteConstraintException) {
@@ -172,9 +178,10 @@ class EventDetailActivity : AppCompatActivity() {
             R.id.fav_match_item -> {
                 if (!isFav) {
                     makeAsFav()
-                }else{
+                } else {
                     removeFromFav()
                 }
+                setResult(Activity.RESULT_OK, Intent().putExtra(IS_FAV_CHANGE, true))
                 true
             }
             else -> {
@@ -186,9 +193,9 @@ class EventDetailActivity : AppCompatActivity() {
     private fun removeFromFav() {
         try {
             database.use {
-                delete(FavEvent.TABLE_FAV_EVENT, "${FavEvent.IdMatch} = $id")
+                delete(FavEvent.TABLE_FAV_EVENT, "${FavEvent.IdEvent} = $id")
             }
-            root_layout.longSnackbar("Match removed from favourite").show()
+            root_layout.longSnackbar(getString(R.string.fav_removed)).show()
             isFav = false
             updateIcon()
         } catch (e: SQLiteConstraintException) {

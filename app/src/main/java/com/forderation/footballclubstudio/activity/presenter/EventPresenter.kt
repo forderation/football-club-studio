@@ -5,7 +5,6 @@ import com.forderation.footballclubstudio.activity.view.ListEventView
 import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.fragment.EventFragment
 import com.forderation.footballclubstudio.model.event.GetEvents
-import com.forderation.footballclubstudio.db.FavDBHelper
 import com.forderation.footballclubstudio.db.FavEvent
 import com.forderation.footballclubstudio.db.database
 import org.jetbrains.anko.db.classParser

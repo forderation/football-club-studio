@@ -23,4 +23,8 @@
     <string name="forwarder">Forwarder</string>
     <string name="substitutes">Substitutes</string>
     <string name="favourite">favourite</string>
+    <string name="formation">Formation</string>
+    <string name="fav_removed">Match removed from favourite</string>
+    <string name="fav_added">Added to favorite</string>
+    <string name="loading_leagues">Now run to get league ...</string>
 </resources>

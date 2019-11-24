@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.adapter.PagerAdapter
-import com.forderation.footballclubstudio.model.club.Club
 import com.fxn.OnBubbleClickListener
 import kotlinx.android.synthetic.main.fragment_next_last_match.*
 
