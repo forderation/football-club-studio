@@ -1,18 +1,21 @@
 package com.forderation.footballclubstudio.activity.presenter
 
 import android.content.Context
+import com.forderation.footballclubstudio.BuildConfig
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.activity.view.LeaguesView
 import com.forderation.footballclubstudio.api.ApiClient
+import com.forderation.footballclubstudio.api.Endpoints
 import com.forderation.footballclubstudio.model.league.GetLeagues
 import com.forderation.footballclubstudio.model.league.League
+import com.google.gson.Gson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import retrofit2.Call
 
-class LeaguesPresenter(private val view: LeaguesView, ctx: Context) {
-    private val typeLeague = ctx.resources.getString(R.string.sport_type)
-    private var updatedList: MutableList<League> = arrayListOf()
+class LeaguesPresenter(private val view: LeaguesView, private val gson: Gson,private val apiClient: ApiClient) {
+    private val typeLeague = BuildConfig.TYPE_SPORT
 
     var limitItem = 10
         set(value) {
@@ -21,8 +24,11 @@ class LeaguesPresenter(private val view: LeaguesView, ctx: Context) {
         }
 
     private fun initList(): List<League>? {
-        val getLeagues: Call<GetLeagues> = ApiClient.service.listLeagues()
-        return getLeagues.execute().body()?.leagues
+        var resp:GetLeagues? = null
+        GlobalScope.launch {
+            resp = gson.fromJson(apiClient.doRequest(Endpoints.getListLeague()).await(),GetLeagues::class.java)
+        }
+        return resp?.leagues
     }
 
     fun getLeagues() {
@@ -49,16 +55,10 @@ class LeaguesPresenter(private val view: LeaguesView, ctx: Context) {
     }
 
     private fun showLeague(leagueOld: League) {
-        doAsync {
-            if (leagueOld.id != null) {
-                val api = ApiClient.service.detailLeague(leagueOld.id)
-                val league: League? = api.execute().body()?.leagues?.get(0)
-                if (league != null) {
-                    updatedList.add(league)
-                    uiThread {
-                        view.addLeague(league)
-                    }
-                }
+        GlobalScope.launch {
+            val resp = gson.fromJson(apiClient.doRequest(Endpoints.getDetailLeague(leagueOld.id!!)).await(),GetLeagues::class.java)
+            if(resp.leagues != null){
+                view.addLeague(resp.leagues[0])
             }
         }
     }

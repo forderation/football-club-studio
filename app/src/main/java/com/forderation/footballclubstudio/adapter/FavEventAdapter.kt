@@ -48,16 +48,22 @@ class FavEventAdapter(
             timeEvent.text = mEvent.time
             dateEvent.text = mEvent.date
             mView.setOnClickListener { mListener(mEvent, mEvent.homeBadge!!, mEvent.awayBadge!!) }
-            Picasso.get()
-                .load(mEvent.homeBadge)
-                .placeholder(R.drawable.progress_animation)
-                .error(R.drawable.image_failed)
-                .into(homeBadge)
-            Picasso.get()
-                .load(mEvent.awayBadge)
-                .placeholder(R.drawable.progress_animation)
-                .error(R.drawable.image_failed)
-                .into(awayBadge)
+            if(mEvent.homeBadge!!.isNotEmpty() && mEvent.awayBadge!!.isNotEmpty()){
+                Picasso.get()
+                    .load(mEvent.homeBadge)
+                    .placeholder(R.drawable.progress_animation)
+                    .error(R.drawable.image_failed)
+                    .fit()
+                    .centerInside()
+                    .into(homeBadge)
+                Picasso.get()
+                    .load(mEvent.awayBadge)
+                    .placeholder(R.drawable.progress_animation)
+                    .error(R.drawable.image_failed)
+                    .fit()
+                    .centerInside()
+                    .into(awayBadge)
+            }
         }
     }
 }

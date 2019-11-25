@@ -1,45 +1,39 @@
 package com.forderation.footballclubstudio.activity.presenter
 
-import android.content.Context
 import com.forderation.footballclubstudio.activity.view.ListEventView
 import com.forderation.footballclubstudio.api.ApiClient
-import com.forderation.footballclubstudio.fragment.EventFragment
+import com.forderation.footballclubstudio.api.Endpoints
 import com.forderation.footballclubstudio.model.event.GetEvents
-import com.forderation.footballclubstudio.db.FavEvent
-import com.forderation.footballclubstudio.db.database
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.select
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
-import retrofit2.Call
+import com.forderation.footballclubstudio.utils.CoroutineContextProvider
+import com.google.gson.Gson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@Suppress("SpellCheckingInspection")
 class EventPresenter(
-    private val view: ListEventView,
-    private val typeEvent: Int,
-    private val ctx: Context
+    private val view: ListEventView, private val gson: Gson, private val api: ApiClient,
+    private val context: CoroutineContextProvider = CoroutineContextProvider()
 ) {
 
     fun getListEventFav() {
-        ctx.database.use {
-            val result = select(FavEvent.TABLE_FAV_EVENT)
-            val favorites = result.parseList(classParser<FavEvent>())
-            view.inflateEventFav(favorites)
+        view.inflateEventFav()
+    }
+
+    fun getLatestEvenMatch(idLeague: String) {
+        GlobalScope.launch(context.main) {
+            val data = gson.fromJson(api.doRequest(
+                Endpoints.getLatestEvent(idLeague)).await(),
+                GetEvents::class.java)
+            view.inflateListEvent(data.events)
         }
     }
 
-    fun getListEventLatestMatch(idLeague: String) {
-        doAsync {
-            var api: Call<GetEvents>? = null
-            when (typeEvent) {
-                (EventFragment.LATEST_MATCH) -> api = ApiClient.service.listPastEvent(idLeague)
-                (EventFragment.UPCOMING_MATCH) -> api = ApiClient.service.listNextEvent(idLeague)
-            }
-            val listEvent = api?.execute()?.body()?.events
-            uiThread {
-                if (listEvent != null) {
-                    view.inflateListEvent(listEvent)
-                }
-            }
+    fun getNextEvenMatch(idLeague: String) {
+        GlobalScope.launch(context.main) {
+            val data = gson.fromJson(api.doRequest(
+                Endpoints.getNextEvent(idLeague)).await(),
+                GetEvents::class.java)
+            view.inflateListEvent(data.events)
         }
     }
 }

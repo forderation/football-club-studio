@@ -4,7 +4,7 @@
     <item
         android:id="@+id/item_10"
         android:icon="@drawable/ic_replay_10_black_24dp"
-        android:title="just 10 item"
+        android:title="@string/just_10_item"
         android:iconTint="@color/colorWhite"
         android:checked="true"
         tools:targetApi="o" />
@@ -13,20 +13,20 @@
         android:id="@+id/item_30"
         android:iconTint="@color/colorWhite"
         android:icon="@drawable/ic_replay_30_black_24dp"
-        android:title="less than 30"
+        android:title="@string/less_than_30"
         tools:targetApi="o" />
 
     <item
         android:id="@+id/item_60"
         android:iconTint="@color/colorWhite"
         android:icon="@drawable/ic_expand_more_black_24dp"
-        android:title="more than 60"
+        android:title="@string/more_than_60"
         tools:targetApi="o" />
 
     <item
         android:id="@+id/item_fav"
         android:iconTint="@color/colorWhite"
         android:icon="@drawable/ic_favorite_black_24dp"
-        android:title="fav match"
+        android:title="@string/fav_match"
         tools:targetApi="o" />
 </menu>

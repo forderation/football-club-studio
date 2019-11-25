@@ -3,42 +3,33 @@ package com.forderation.footballclubstudio.utils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.forderation.footballclubstudio.api.ApiClient
+import com.forderation.footballclubstudio.api.Endpoints
 import com.forderation.footballclubstudio.model.event.Event
-import com.forderation.footballclubstudio.model.event.SearchEvent
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.forderation.footballclubstudio.model.event.GetEvents
+import com.google.gson.Gson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class EventViewModel : ViewModel() {
     private var listEvent: MutableLiveData<List<Event>> = MutableLiveData()
     private var onResponse: MutableLiveData<String> = MutableLiveData()
     private var onLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val gson = Gson()
+    private val apiClient = ApiClient()
 
     fun getData(nameEvent: String) {
         onLoading.value = true
-        doAsync {
-            val api = ApiClient.service.searchEvent(nameEvent)
-            api.enqueue(object : Callback<SearchEvent> {
-                override fun onFailure(call: Call<SearchEvent>, t: Throwable) {
-                    uiThread {
-                        listEvent.value = null
-                        onResponse.value = "Search failure"
-                        onLoading.value = false
-                    }
-                }
-
-                override fun onResponse(call: Call<SearchEvent>, response: Response<SearchEvent>) {
-                    if (response.isSuccessful) {
-                        uiThread {
-                            listEvent.value = response.body()?.events
-                            onResponse.value = "Search success"
-                            onLoading.value = false
-                        }
-                    }
-                }
-            })
+        GlobalScope.launch {
+            val resp = gson.fromJson(apiClient.doRequest(Endpoints.getSearchEvent(nameEvent)).await(),GetEvents::class.java)
+            if(resp.events.isEmpty()){
+                listEvent.value = null
+                onResponse.value = "Search failure"
+                onLoading.value = false
+            }else{
+                listEvent.value = resp.events
+                onResponse.value = "Search success"
+                onLoading.value = false
+            }
         }
     }
 

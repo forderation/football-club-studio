@@ -7,17 +7,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.api.ApiClient
+import com.forderation.footballclubstudio.api.Endpoints
 import com.forderation.footballclubstudio.model.club.GetTeams
 import com.forderation.footballclubstudio.model.event.Event
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import org.jetbrains.anko.doAsync
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.find
-import org.jetbrains.anko.uiThread
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class EventAdapter(
     private var eventList: List<Event>,
@@ -60,60 +59,52 @@ class EventAdapter(
             scoreAway.text = mEvent.awayScore
             timeEvent.text = mEvent.time
             dateEvent.text = mEvent.date
-            val homeTeams = ApiClient.service.detailTeam(mEvent.idHome!!)
-            val awayTeams = ApiClient.service.detailTeam(mEvent.idAway!!)
             var homeImgUrl = ""
             var awayImgUrl = ""
-            doAsync {
-                homeTeams.enqueue(object : Callback<GetTeams> {
-                    override fun onFailure(call: Call<GetTeams>, t: Throwable) {
-                        Snackbar
-                            .make(
-                                mView,
-                                "Error load data please check your connection",
-                                Snackbar.LENGTH_SHORT
-                            )
-                            .show()
-                    }
-
-                    override fun onResponse(call: Call<GetTeams>, response: Response<GetTeams>) {
-                        val teams = response.body()!!.clubs[0]
-                        uiThread {
-                            homeImgUrl = teams.getBadgeSmall()
-                            Picasso.get()
-                                .load(homeImgUrl)
-                                .placeholder(R.drawable.progress_animation)
-                                .error(R.drawable.image_failed)
-                                .into(homeBadge)
-                        }
-                    }
-                })
-                awayTeams.enqueue(object : Callback<GetTeams> {
-                    override fun onFailure(call: Call<GetTeams>, t: Throwable) {
-                        Snackbar
-                            .make(
-                                mView,
-                                "Error load data please check your connection",
-                                Snackbar.LENGTH_SHORT
-                            )
-                            .show()
-                    }
-
-                    override fun onResponse(call: Call<GetTeams>, response: Response<GetTeams>) {
-                        val teams = response.body()!!.clubs[0]
-                        uiThread {
-                            awayImgUrl = teams.getBadgeSmall()
-                            Picasso.get()
-                                .load(awayImgUrl)
-                                .placeholder(R.drawable.progress_animation)
-                                .error(R.drawable.image_failed)
-                                .into(awayBadge)
-                        }
-                    }
-                })
-                uiThread {
-                    mView.setOnClickListener { mListener(mEvent, homeImgUrl, awayImgUrl) }
+            val gson = Gson()
+            val apiClient = ApiClient()
+            GlobalScope.launch {
+                val respHome = gson.fromJson(
+                    apiClient.doRequest(Endpoints.getDetailTeam(mEvent.idHome!!)).await(),
+                    GetTeams::class.java
+                )
+                if (respHome.clubs.isEmpty()) {
+                    Snackbar
+                        .make(
+                            mView,
+                            "Error load data please check your connection",
+                            Snackbar.LENGTH_SHORT
+                        )
+                        .show()
+                } else {
+                    homeImgUrl = respHome.clubs[0].getBadgeSmall()
+                    Picasso.get()
+                        .load(homeImgUrl)
+                        .placeholder(R.drawable.progress_animation)
+                        .error(R.drawable.image_failed)
+                        .into(homeBadge)
                 }
+                val respAway = gson.fromJson(
+                    apiClient.doRequest(Endpoints.getDetailTeam(mEvent.idAway!!)).await(),
+                    GetTeams::class.java
+                )
+                if (respAway.clubs.isEmpty()) {
+                    Snackbar
+                        .make(
+                            mView,
+                            "Error load data please check your connection",
+                            Snackbar.LENGTH_SHORT
+                        )
+                        .show()
+                } else {
+                    awayImgUrl = respAway.clubs[0].getBadgeSmall()
+                    Picasso.get()
+                        .load(awayImgUrl)
+                        .placeholder(R.drawable.progress_animation)
+                        .error(R.drawable.image_failed)
+                        .into(awayBadge)
+                }
+                mView.setOnClickListener { mListener(mEvent, homeImgUrl, awayImgUrl) }
             }
         }
     }

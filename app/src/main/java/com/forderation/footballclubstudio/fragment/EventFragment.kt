@@ -14,17 +14,22 @@ import com.forderation.footballclubstudio.activity.presenter.EventPresenter
 import com.forderation.footballclubstudio.activity.view.ListEventView
 import com.forderation.footballclubstudio.adapter.EventAdapter
 import com.forderation.footballclubstudio.adapter.FavEventAdapter
+import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.db.FavEvent
+import com.forderation.footballclubstudio.db.database
 import com.forderation.footballclubstudio.db.toEvent
 import com.forderation.footballclubstudio.model.event.Event
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_event_list.*
+import org.jetbrains.anko.db.classParser
+import org.jetbrains.anko.db.select
 
 class EventFragment : Fragment(),
     ListEventView {
 
     companion object {
         const val LATEST_MATCH = 0
-        const val UPCOMING_MATCH = 1
+        const val NEXT_MATCH = 1
         const val FAV_MATCH = 2
         const val ID_LEAGUE = "ID_LEAGUE"
         const val TYPE_EVENT = "TYPE_EVENT"
@@ -67,8 +72,13 @@ class EventFragment : Fragment(),
         }
     }
 
-    override fun inflateEventFav(listEvent: List<FavEvent>) {
-        mAdapterFav = FavEventAdapter(listEvent) { e,h,a ->
+    override fun inflateEventFav() {
+        var favorites:List<FavEvent> = arrayListOf()
+        context?.database?.use {
+            val result = select(FavEvent.TABLE_FAV_EVENT)
+            favorites = result.parseList(classParser())
+        }
+        mAdapterFav = FavEventAdapter(favorites) { e,h,a ->
             val intent = Intent(activity, EventDetailActivity::class.java)
             intent.putExtra(EventDetailActivity.EVENT_INTENT, e.toEvent())
             intent.putExtra(EventDetailActivity.HOME_BADGE_URL, h)
@@ -96,11 +106,19 @@ class EventFragment : Fragment(),
         val bundle = arguments
         if (bundle != null) {
             val typeEvent = bundle.getInt(TYPE_EVENT)
-            mPresenter = EventPresenter(this, typeEvent, activity!!.applicationContext)
-            if (typeEvent != FAV_MATCH) {
-                mPresenter.getListEventLatestMatch(bundle.getString(ID_LEAGUE)!!)
-            } else {
+            mPresenter = EventPresenter(this, Gson(), ApiClient())
+            val idLeague = bundle.getString(ID_LEAGUE)
+            if (typeEvent == FAV_MATCH) {
                 mPresenter.getListEventFav()
+            } else {
+                when(typeEvent){
+                    LATEST_MATCH -> {
+                        mPresenter.getLatestEvenMatch(idLeague?:"")
+                    }
+                    NEXT_MATCH -> {
+                        mPresenter.getNextEvenMatch(idLeague?:"")
+                    }
+                }
             }
         }
     }

@@ -37,7 +37,7 @@ class NextLastFragment : Fragment(){
         if (bundle != null){
             val lgId = bundle.getString(LEAGUE_ID)!!
             pagerAdapter.listFragment.add(EventFragment.newInstance(lgId, EventFragment.LATEST_MATCH))
-            pagerAdapter.listFragment.add(EventFragment.newInstance(lgId, EventFragment.UPCOMING_MATCH))
+            pagerAdapter.listFragment.add(EventFragment.newInstance(lgId, EventFragment.NEXT_MATCH))
         }
         view_pager_event.adapter = pagerAdapter
         view_pager_event.offscreenPageLimit = 2
@@ -49,7 +49,7 @@ class NextLastFragment : Fragment(){
                         view_pager_event.currentItem = EventFragment.LATEST_MATCH
                     }
                     R.id.next_match_tab -> {
-                        view_pager_event.currentItem = EventFragment.UPCOMING_MATCH
+                        view_pager_event.currentItem = EventFragment.NEXT_MATCH
                     }
                 }
             }

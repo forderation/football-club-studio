@@ -14,8 +14,10 @@ import com.forderation.footballclubstudio.activity.LeagueDetailActivity
 import com.forderation.footballclubstudio.activity.presenter.LeaguesPresenter
 import com.forderation.footballclubstudio.activity.view.LeaguesView
 import com.forderation.footballclubstudio.adapter.LeagueAdapter
+import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.model.league.League
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_list_league.*
 import org.jetbrains.anko.support.v4.onRefresh
 
@@ -77,7 +79,7 @@ class ListLeagueFragment : Fragment(),LeaguesView {
         }
         snackBar =
             Snackbar.make(swipe_layout, getString(R.string.loading_leagues), Snackbar.LENGTH_INDEFINITE)
-        presenter = LeaguesPresenter(this, ctx!!)
+        presenter = LeaguesPresenter(this, Gson(), ApiClient())
         rv_leagues.layoutManager = GridLayoutManager(ctx, 2)
         rv_leagues.adapter = adapter
         val bundle = arguments

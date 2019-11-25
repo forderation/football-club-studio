@@ -14,11 +14,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.forderation.footballclubstudio.BuildConfig
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.activity.presenter.DetailLeaguePresenter
 import com.forderation.footballclubstudio.activity.view.DetailLeagueView
 import com.forderation.footballclubstudio.adapter.ClubAdapter
 import com.forderation.footballclubstudio.adapter.EventAdapter
+import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.fragment.NextLastFragment
 import com.forderation.footballclubstudio.fragment.ResultEventFragment
 import com.forderation.footballclubstudio.model.club.Club
@@ -26,6 +28,7 @@ import com.forderation.footballclubstudio.model.league.League
 import com.forderation.footballclubstudio.utils.BottomSheet
 import com.forderation.footballclubstudio.utils.EventViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_league_detail.*
 import kotlinx.android.synthetic.main.toolbar_league.*
@@ -87,7 +90,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
         fragmentManager = supportFragmentManager
         adapter = ClubAdapter { }
         rvClub = list_club
-        presenter = DetailLeaguePresenter(this)
+        presenter = DetailLeaguePresenter(this, Gson(), ApiClient())
         rvClub.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvClub.adapter = adapter
         league = intent.getParcelableExtra(LEAGUE_INTENT)
@@ -103,7 +106,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
         viewModel.listEvent().observe(this, Observer {
             if(it!=null){
                 val listEvent = it.filter { e ->
-                    e.strSport.equals(getString(R.string.sport_type)) && e.idLeague.equals(league?.id)
+                    e.strSport.equals(BuildConfig.TYPE_SPORT) && e.idLeague.equals(league?.id)
                 }.toMutableList()
                 mEventAdapter.setEventList(listEvent)
             }
