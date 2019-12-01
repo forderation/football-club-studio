@@ -9,6 +9,8 @@ object Endpoints {
 
     fun getDetailTeam(idTeam:String) = "api/v1/json/1/lookupteam.php?id=$idTeam"
 
+    fun getDetailEvent(idEvent: String) = "api/v1/json/1/lookupevent.php?id=$idEvent"
+
     fun getLatestEvent(idLeague: String) = "api/v1/json/1/eventspastleague.php?id=$idLeague"
 
     fun getNextEvent(idLeague: String) = "api/v1/json/1/eventsnextleague.php?id=$idLeague"

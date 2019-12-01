@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -64,6 +65,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
                 .replace(R.id.frame_container, fg,NextLastFragment::class.java.simpleName)
                 .commit()
         }
+        searchView.visibility = View.VISIBLE
     }
 
     private fun showFgEventSearchResult(){
@@ -128,13 +130,15 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
     private lateinit var mEventAdapter: EventAdapter
 
     private lateinit var viewModel:EventViewModel
+    private lateinit var searchView: SearchView
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         inflater.inflate(R.menu.option_menu, menu)
         val searchItem = menu?.findItem(R.id.search_menu)
-        val searchView = searchItem?.actionView as SearchView
+        searchView = searchItem?.actionView as SearchView
+        searchView.visibility = View.INVISIBLE
         searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener{
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 return true

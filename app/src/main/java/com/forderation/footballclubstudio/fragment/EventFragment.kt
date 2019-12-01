@@ -60,8 +60,10 @@ class EventFragment : Fragment(),
             intent.putExtra(EventDetailActivity.AWAY_BADGE_URL, a)
             startActivity(intent)
         }
-        list_event.layoutManager = LinearLayoutManager(context)
-        list_event.adapter = mAdapter
+        if(list_event != null){
+            list_event.layoutManager = LinearLayoutManager(context)
+            list_event.adapter = mAdapter
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

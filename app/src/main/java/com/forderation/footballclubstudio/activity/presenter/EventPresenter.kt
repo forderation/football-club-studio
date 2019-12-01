@@ -21,7 +21,7 @@ class EventPresenter(
 
     fun getLatestEvenMatch(idLeague: String) {
         GlobalScope.launch(context.main) {
-            val data = gson.fromJson(api.doRequest(
+            val data = gson.fromJson(api.doRequestAsync(
                 Endpoints.getLatestEvent(idLeague)).await(),
                 GetEvents::class.java)
             view.inflateListEvent(data.events)
@@ -30,10 +30,10 @@ class EventPresenter(
 
     fun getNextEvenMatch(idLeague: String) {
         GlobalScope.launch(context.main) {
-            val data = gson.fromJson(api.doRequest(
-                Endpoints.getNextEvent(idLeague)).await(),
-                GetEvents::class.java)
-            view.inflateListEvent(data.events)
+            val data = gson.fromJson(api.doRequestAsync(Endpoints.getNextEvent(idLeague)).await(), GetEvents::class.java)
+            if(data!=null){
+                view.inflateListEvent(data.events)
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.forderation.footballclubstudio.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +11,20 @@ import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.api.Endpoints
 import com.forderation.footballclubstudio.model.club.GetTeams
 import com.forderation.footballclubstudio.model.event.Event
+import com.forderation.footballclubstudio.utils.CoroutineContextProvider
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 
 class EventAdapter(
     private var eventList: List<Event>,
+    private val context: CoroutineContextProvider = CoroutineContextProvider(),
     private val mListener: (Event, String, String) -> Unit
 ) : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
@@ -63,9 +68,9 @@ class EventAdapter(
             var awayImgUrl = ""
             val gson = Gson()
             val apiClient = ApiClient()
-            GlobalScope.launch {
+            GlobalScope.launch(context.main){
                 val respHome = gson.fromJson(
-                    apiClient.doRequest(Endpoints.getDetailTeam(mEvent.idHome!!)).await(),
+                    apiClient.doRequestAsync(Endpoints.getDetailTeam(mEvent.idHome!!)).await(),
                     GetTeams::class.java
                 )
                 if (respHome.clubs.isEmpty()) {
@@ -85,7 +90,7 @@ class EventAdapter(
                         .into(homeBadge)
                 }
                 val respAway = gson.fromJson(
-                    apiClient.doRequest(Endpoints.getDetailTeam(mEvent.idAway!!)).await(),
+                    apiClient.doRequestAsync(Endpoints.getDetailTeam(mEvent.idAway!!)).await(),
                     GetTeams::class.java
                 )
                 if (respAway.clubs.isEmpty()) {

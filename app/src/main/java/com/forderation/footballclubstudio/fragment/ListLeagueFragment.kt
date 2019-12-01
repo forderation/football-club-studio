@@ -82,15 +82,16 @@ class ListLeagueFragment : Fragment(),LeaguesView {
         presenter = LeaguesPresenter(this, Gson(), ApiClient())
         rv_leagues.layoutManager = GridLayoutManager(ctx, 2)
         rv_leagues.adapter = adapter
+        adapter.clearAdapter()
         val bundle = arguments
         if(bundle != null){
             presenter.limitItem = bundle.getInt(ITEM_INTENT,10)
         }else{
-            presenter.getLeagues()
+            presenter.initList()
         }
         swipe_layout.onRefresh {
             adapter.clearAdapter()
-            presenter.getLeagues()
+            presenter.initList()
         }
     }
 
