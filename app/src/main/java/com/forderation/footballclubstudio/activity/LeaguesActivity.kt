@@ -13,7 +13,7 @@ class LeaguesActivity : AppCompatActivity() {
     private lateinit var leaguesFg: ListLeagueFragment
     private lateinit var favEventFg: EventFragment
     private fun showFgLeagues(item:Int = 10){
-        leaguesFg = ListLeagueFragment.newInstance(this, item)
+        leaguesFg = ListLeagueFragment.newInstance(item)
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.frame_container, leaguesFg, ListLeagueFragment::class.java.simpleName)

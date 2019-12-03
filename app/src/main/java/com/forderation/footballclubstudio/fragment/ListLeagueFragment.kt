@@ -1,6 +1,5 @@
 package com.forderation.footballclubstudio.fragment
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,15 +25,13 @@ class ListLeagueFragment : Fragment(),LeaguesView {
     private lateinit var snackBar: Snackbar
     private lateinit var presenter: LeaguesPresenter
     private lateinit var adapter: LeagueAdapter
-    private var ctx: Context? = null
 
     companion object{
         const val ITEM_INTENT = "ITEM_INTENT"
-        fun newInstance(ctx: Context, item: Int): ListLeagueFragment {
+        fun newInstance(item: Int): ListLeagueFragment {
             val bundle = Bundle()
             bundle.putInt(ITEM_INTENT, item)
             val fg = ListLeagueFragment()
-            fg.ctx = ctx
             fg.arguments = bundle
             return fg
         }
@@ -60,7 +57,7 @@ class ListLeagueFragment : Fragment(),LeaguesView {
     }
 
     override fun loadFail(msg: String) {
-        Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateView(
@@ -72,15 +69,15 @@ class ListLeagueFragment : Fragment(),LeaguesView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = LeagueAdapter(arrayListOf(), ctx!!) {
-            val intent = Intent(ctx, LeagueDetailActivity::class.java)
+        adapter = LeagueAdapter(arrayListOf(), context!!) {
+            val intent = Intent(context, LeagueDetailActivity::class.java)
             intent.putExtra(LeagueDetailActivity.LEAGUE_INTENT, it)
             startActivity(intent)
         }
         snackBar =
             Snackbar.make(swipe_layout, getString(R.string.loading_leagues), Snackbar.LENGTH_INDEFINITE)
         presenter = LeaguesPresenter(this, Gson(), ApiClient())
-        rv_leagues.layoutManager = GridLayoutManager(ctx, 2)
+        rv_leagues.layoutManager = GridLayoutManager(context, 2)
         rv_leagues.adapter = adapter
         adapter.clearAdapter()
         val bundle = arguments

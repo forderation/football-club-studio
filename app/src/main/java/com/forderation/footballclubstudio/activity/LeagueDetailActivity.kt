@@ -48,7 +48,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
         adapter.clubList = clubList.toMutableList()
         mEventAdapter = EventAdapter(arrayListOf()){ e, h, a ->
             val intent = Intent(this,EventDetailActivity::class.java)
-            intent.putExtra(EventDetailActivity.ID_EVENT,e)
+            intent.putExtra(EventDetailActivity.ID_EVENT,e.idEvent)
             intent.putExtra(EventDetailActivity.HOME_BADGE_URL,h)
             intent.putExtra(EventDetailActivity.AWAY_BADGE_URL,a)
             startActivity(intent)
@@ -85,6 +85,11 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
     private lateinit var presenter: DetailLeaguePresenter
     private lateinit var rvClub: RecyclerView
     private var league: League? = null
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        presenter.getClubList(league?.name!!)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
