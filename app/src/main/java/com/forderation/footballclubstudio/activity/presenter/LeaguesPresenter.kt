@@ -61,9 +61,7 @@ class LeaguesPresenter(private val view: LeaguesView,
     fun showLeague(idLeague: String) {
         GlobalScope.launch(context.main) {
             val resp = gson.fromJson(apiClient.doRequestAsync(Endpoints.getDetailLeague(idLeague)).await(),GetLeagues::class.java)
-            if(resp?.leagues?.isNotEmpty()!!){
-                view.addLeague(resp.leagues[0])
-            }
+            view.addLeague(resp.leagues!!)
         }
     }
 }

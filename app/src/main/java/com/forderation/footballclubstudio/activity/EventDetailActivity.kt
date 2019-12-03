@@ -10,9 +10,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.forderation.footballclubstudio.R
+import com.forderation.footballclubstudio.activity.presenter.DetailEventPresenter
+import com.forderation.footballclubstudio.activity.view.DetailEventView
+import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.db.FavEvent
 import com.forderation.footballclubstudio.db.database
 import com.forderation.footballclubstudio.model.event.Event
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_event_detail.*
 import org.jetbrains.anko.db.classParser
@@ -21,16 +25,15 @@ import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import org.jetbrains.anko.design.longSnackbar
 
-class EventDetailActivity : AppCompatActivity() {
+class EventDetailActivity : AppCompatActivity(),DetailEventView {
 
     companion object {
-        const val EVENT_INTENT = "EVENT_INTENT"
+        const val ID_EVENT = "ID_EVENT"
         const val HOME_BADGE_URL = "HOME_BADGE_URL"
         const val AWAY_BADGE_URL = "AWAY_BADGE_URL"
         const val IS_FAV_CHANGE = "IS_FAV_CHANGE"
     }
 
-    private lateinit var mEvent: Event
     private var isFav: Boolean = false
     private lateinit var id: String
     private var favMenu: MenuItem? = null
@@ -58,7 +61,7 @@ class EventDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_detail)
-        mEvent = intent.getParcelableExtra(EVENT_INTENT)!!
+        id = intent.getStringExtra(ID_EVENT)!!
         homeImgUrl = intent.getStringExtra(HOME_BADGE_URL)!!
         awayImgUrl = intent.getStringExtra(AWAY_BADGE_URL)!!
         if (homeImgUrl.isNotEmpty() && awayImgUrl.isNotEmpty()) {
@@ -73,36 +76,8 @@ class EventDetailActivity : AppCompatActivity() {
                 .error(R.drawable.image_failed)
                 .into(away_badge)
         }
-        id = mEvent.idEvent!!
-        title_event.text = mEvent.name
-        time_event.text = mEvent.time
-        date_event.text = mEvent.date
-        score_home.text = mEvent.homeScore
-        score_away.text = mEvent.awayScore
-        round_league.text = getString(R.string.round_tv).plus(mEvent.round)
-        name_league.text = mEvent.strLeague
-        home_team.text = mEvent.homeTeam
-        away_team.text = mEvent.awayTeam
-        //home attributes
-        goal_details_home.setText(mEvent.strHomeGoalDetails, this)
-        red_cards_home.setText(mEvent.strHomeRedCards, this)
-        yellow_card_home.setText(mEvent.strHomeYellowCards, this)
-        gk_home.setText(mEvent.strHomeLineupGoalkeeper, this)
-        defender_home.setText(mEvent.strHomeLineupDefense, this)
-        midfielder_home.setText(mEvent.strHomeLineupMidfield, this)
-        forwarder_home.setText(mEvent.strHomeLineupForward, this)
-        substitutes_home.setText(mEvent.strHomeLineupSubstitutes, this)
-        formation_home.setText(mEvent.strHomeFormation, this)
-        //away attributes
-        goal_details_away.setText(mEvent.strAwayGoalDetails, this)
-        red_cards_away.setText(mEvent.strAwayRedCards, this)
-        yellow_card_away.setText(mEvent.strAwayYellowCards, this)
-        gk_away.setText(mEvent.strAwayLineupGoalkeeper, this)
-        defender_away.setText(mEvent.strAwayLineupDefense, this)
-        midfielder_away.setText(mEvent.strAwayLineupMidfield, this)
-        forwarder_away.setText(mEvent.strAwayLineupForward, this)
-        substitutes_away.setText(mEvent.strAwayLineupSubstitutes, this)
-        formation_away.setText(mEvent.strAwayFormation, this)
+        val presenter = DetailEventPresenter(this, Gson(), ApiClient())
+        presenter.getDetailEvent(id)
         supportActionBar?.title = "Match Detail"
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -201,5 +176,41 @@ class EventDetailActivity : AppCompatActivity() {
         } catch (e: SQLiteConstraintException) {
             root_layout.longSnackbar(e.toString()).show()
         }
+    }
+
+    private lateinit var mEvent:Event
+
+    override fun showDetailEvent(listEvent: List<Event>) {
+        val mEvent = listEvent[0]
+        this.mEvent = mEvent
+        title_event.text = mEvent.name
+        time_event.text = mEvent.time
+        date_event.text = mEvent.date
+        score_home.text = mEvent.homeScore
+        score_away.text = mEvent.awayScore
+        round_league.text = getString(R.string.round_tv).plus(mEvent.round)
+        name_league.text = mEvent.strLeague
+        home_team.text = mEvent.homeTeam
+        away_team.text = mEvent.awayTeam
+        //home attributes
+        goal_details_home.setText(mEvent.strHomeGoalDetails, this)
+        red_cards_home.setText(mEvent.strHomeRedCards, this)
+        yellow_card_home.setText(mEvent.strHomeYellowCards, this)
+        gk_home.setText(mEvent.strHomeLineupGoalkeeper, this)
+        defender_home.setText(mEvent.strHomeLineupDefense, this)
+        midfielder_home.setText(mEvent.strHomeLineupMidfield, this)
+        forwarder_home.setText(mEvent.strHomeLineupForward, this)
+        substitutes_home.setText(mEvent.strHomeLineupSubstitutes, this)
+        formation_home.setText(mEvent.strHomeFormation, this)
+        //away attributes
+        goal_details_away.setText(mEvent.strAwayGoalDetails, this)
+        red_cards_away.setText(mEvent.strAwayRedCards, this)
+        yellow_card_away.setText(mEvent.strAwayYellowCards, this)
+        gk_away.setText(mEvent.strAwayLineupGoalkeeper, this)
+        defender_away.setText(mEvent.strAwayLineupDefense, this)
+        midfielder_away.setText(mEvent.strAwayLineupMidfield, this)
+        forwarder_away.setText(mEvent.strAwayLineupForward, this)
+        substitutes_away.setText(mEvent.strAwayLineupSubstitutes, this)
+        formation_away.setText(mEvent.strAwayFormation, this)
     }
 }

@@ -10,16 +10,27 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class DetailLeaguePresenter(
-    private val view: DetailLeagueView, private val gson: Gson,
-    private val apiClient: ApiClient, private val context: CoroutineContextProvider = CoroutineContextProvider()
+    private val view: DetailLeagueView,
+    private val gson: Gson,
+    private val apiClient: ApiClient,
+    private val context: CoroutineContextProvider = CoroutineContextProvider()
 ) {
 
     fun getClubList(leagueName: String) {
-        GlobalScope.launch(context.main){
+        GlobalScope.launch(context.main) {
             val resp = gson.fromJson(
-                apiClient.doRequestAsync(Endpoints.getListClub(leagueName.replace(" ","%20"))).await(), GetTeams::class.java
+                apiClient.doRequestAsync(
+                    Endpoints.getListClub(
+                        leagueName.replace(
+                            " ",
+                            "%20"
+                        )
+                    )
+                ).await(), GetTeams::class.java
             )
-            view.showListClub(resp.clubs)
+            if (resp.clubs != null) {
+                view.showListClub(resp.clubs)
+            }
         }
     }
 }

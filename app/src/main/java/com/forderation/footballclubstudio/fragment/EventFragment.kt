@@ -55,7 +55,7 @@ class EventFragment : Fragment(),
     override fun inflateListEvent(listEvent: List<Event>) {
         mAdapter = EventAdapter(listEvent) { e, h, a ->
             val intent = Intent(activity, EventDetailActivity::class.java)
-            intent.putExtra(EventDetailActivity.EVENT_INTENT, e)
+            intent.putExtra(EventDetailActivity.ID_EVENT, e.idEvent)
             intent.putExtra(EventDetailActivity.HOME_BADGE_URL, h)
             intent.putExtra(EventDetailActivity.AWAY_BADGE_URL, a)
             startActivity(intent)
@@ -82,7 +82,7 @@ class EventFragment : Fragment(),
         }
         mAdapterFav = FavEventAdapter(favorites) { e,h,a ->
             val intent = Intent(activity, EventDetailActivity::class.java)
-            intent.putExtra(EventDetailActivity.EVENT_INTENT, e.toEvent())
+            intent.putExtra(EventDetailActivity.ID_EVENT, e.toEvent().idEvent)
             intent.putExtra(EventDetailActivity.HOME_BADGE_URL, h)
             intent.putExtra(EventDetailActivity.AWAY_BADGE_URL, a)
             startActivityForResult(intent, REQUEST_UPDATE_FAV)

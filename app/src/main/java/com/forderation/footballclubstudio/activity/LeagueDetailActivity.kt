@@ -48,7 +48,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
         adapter.clubList = clubList.toMutableList()
         mEventAdapter = EventAdapter(arrayListOf()){ e, h, a ->
             val intent = Intent(this,EventDetailActivity::class.java)
-            intent.putExtra(EventDetailActivity.EVENT_INTENT,e)
+            intent.putExtra(EventDetailActivity.ID_EVENT,e)
             intent.putExtra(EventDetailActivity.HOME_BADGE_URL,h)
             intent.putExtra(EventDetailActivity.AWAY_BADGE_URL,a)
             startActivity(intent)

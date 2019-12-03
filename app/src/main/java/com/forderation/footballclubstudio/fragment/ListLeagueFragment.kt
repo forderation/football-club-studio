@@ -40,8 +40,8 @@ class ListLeagueFragment : Fragment(),LeaguesView {
         }
     }
 
-    override fun addLeague(item: League) {
-        adapter.addItem(item)
+    override fun addLeague(listItem: List<League>) {
+        adapter.addItem(listItem[0])
     }
 
     override fun showLoading() {

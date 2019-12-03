@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class GetTeams(
     @SerializedName("teams")
-    val clubs: List<Club>
+    val clubs: List<Club>?
 )

@@ -11,13 +11,14 @@ import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class EventViewModel : ViewModel() {
-    private val context: CoroutineContextProvider = CoroutineContextProvider()
-    private var listEvent: MutableLiveData<List<Event>> = MutableLiveData()
-    private var onResponse: MutableLiveData<String> = MutableLiveData()
-    private var onLoading: MutableLiveData<Boolean> = MutableLiveData(false)
-    private val gson = Gson()
-    private val apiClient = ApiClient()
+class EventViewModel(
+    val gson: Gson = Gson(),
+    val apiClient: ApiClient = ApiClient(),
+    val context: CoroutineContextProvider = CoroutineContextProvider(),
+    var listEvent: MutableLiveData<List<Event>> = MutableLiveData(),
+    var onResponse: MutableLiveData<String> = MutableLiveData(),
+    var onLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+) : ViewModel() {
 
     fun getData(nameEvent: String) {
         onLoading.value = true

@@ -73,7 +73,7 @@ class EventAdapter(
                     apiClient.doRequestAsync(Endpoints.getDetailTeam(mEvent.idHome!!)).await(),
                     GetTeams::class.java
                 )
-                if (respHome.clubs.isEmpty()) {
+                if (respHome.clubs!!.isEmpty()) {
                     Snackbar
                         .make(
                             mView,
@@ -93,7 +93,7 @@ class EventAdapter(
                     apiClient.doRequestAsync(Endpoints.getDetailTeam(mEvent.idAway!!)).await(),
                     GetTeams::class.java
                 )
-                if (respAway.clubs.isEmpty()) {
+                if (respAway.clubs!!.isEmpty()) {
                     Snackbar
                         .make(
                             mView,
