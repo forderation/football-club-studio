@@ -2,27 +2,19 @@ package com.forderation.footballclubstudio.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.activity.presenter.DetailEventPresenter
 import com.forderation.footballclubstudio.activity.view.DetailEventView
 import com.forderation.footballclubstudio.api.ApiClient
-import com.forderation.footballclubstudio.db.FavEvent
-import com.forderation.footballclubstudio.db.database
 import com.forderation.footballclubstudio.model.event.Event
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_event_detail.*
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.delete
-import org.jetbrains.anko.db.insert
-import org.jetbrains.anko.db.select
 import org.jetbrains.anko.design.longSnackbar
 
 class EventDetailActivity : AppCompatActivity(),DetailEventView {
@@ -76,73 +68,15 @@ class EventDetailActivity : AppCompatActivity(),DetailEventView {
                 .error(R.drawable.image_failed)
                 .into(away_badge)
         }
-        val presenter = DetailEventPresenter(this, Gson(), ApiClient())
+        presenter = DetailEventPresenter(this, this,Gson(), ApiClient())
         presenter.getDetailEvent(id)
         supportActionBar?.title = "Match Detail"
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        checkFavourite()
+        isFav = presenter.checkFav(id)
     }
 
-    private fun checkFavourite() {
-        database.use {
-            val result = select(FavEvent.TABLE_FAV_EVENT)
-                .whereArgs(
-                    "(IdEvent = {idEvent})",
-                    "idEvent" to id
-                )
-            val favourites = result.parseList(classParser<FavEvent>())
-            isFav = favourites.isNotEmpty()
-        }
-    }
-
-    private fun makeAsFav() {
-        try {
-            database.use {
-                insert(
-                    FavEvent.TABLE_FAV_EVENT,
-                    FavEvent.IdLeague to mEvent.idLeague,
-                    FavEvent.IdEvent to id,
-                    FavEvent.Name to mEvent.name,
-                    FavEvent.Time to mEvent.time,
-                    FavEvent.Date to mEvent.date,
-                    FavEvent.HomeScore to mEvent.homeScore,
-                    FavEvent.AwayScore to mEvent.awayScore,
-                    FavEvent.Round to mEvent.round,
-                    FavEvent.League to mEvent.strLeague,
-                    FavEvent.HomeTeam to mEvent.homeTeam,
-                    FavEvent.AwayTeam to mEvent.awayTeam,
-                    FavEvent.HomeGoalDetails to mEvent.strHomeGoalDetails,
-                    FavEvent.HomeRedCards to mEvent.strHomeRedCards,
-                    FavEvent.HomeYellowCards to mEvent.strHomeYellowCards,
-                    FavEvent.HomeLineupGoalkeeper to mEvent.strHomeLineupGoalkeeper,
-                    FavEvent.HomeLineupDefense to mEvent.strHomeLineupDefense,
-                    FavEvent.HomeLineupMidfield to mEvent.strHomeLineupMidfield,
-                    FavEvent.HomeLineupForward to mEvent.strHomeLineupForward,
-                    FavEvent.HomeLineupSubstitutes to mEvent.strHomeLineupSubstitutes,
-                    FavEvent.AwayGoalDetails to mEvent.strAwayGoalDetails,
-                    FavEvent.AwayRedCards to mEvent.strAwayRedCards,
-                    FavEvent.AwayYellowCards to mEvent.strAwayYellowCards,
-                    FavEvent.AwayLineupGoalkeeper to mEvent.strAwayLineupGoalkeeper,
-                    FavEvent.AwayLineupDefense to mEvent.strAwayLineupDefense,
-                    FavEvent.AwayLineupMidfield to mEvent.strAwayLineupMidfield,
-                    FavEvent.AwayLineupForward to mEvent.strAwayLineupForward,
-                    FavEvent.AwayLineupSubstitutes to mEvent.strAwayLineupSubstitutes,
-                    FavEvent.HomeBadge to homeImgUrl,
-                    FavEvent.AwayBadge to awayImgUrl,
-                    FavEvent.HomeFormation to mEvent.strHomeFormation,
-                    FavEvent.AwayFormation to mEvent.strAwayFormation,
-                    FavEvent.IdHome to mEvent.idHome,
-                    FavEvent.IdAway to mEvent.idAway
-                )
-            }
-            root_layout.longSnackbar(getString(R.string.fav_added)).show()
-            isFav = true
-            updateIcon()
-        } catch (e: SQLiteConstraintException) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
-        }
-    }
+    private lateinit var presenter:DetailEventPresenter
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -152,9 +86,13 @@ class EventDetailActivity : AppCompatActivity(),DetailEventView {
             }
             R.id.fav_match_item -> {
                 if (!isFav) {
-                    makeAsFav()
+                    presenter.addToFav(mEvent, id, homeImgUrl, awayImgUrl)
+                    isFav = true
+                    updateIcon()
                 } else {
-                    removeFromFav()
+                    presenter.removeFav(id)
+                    isFav = false
+                    updateIcon()
                 }
                 setResult(Activity.RESULT_OK, Intent().putExtra(IS_FAV_CHANGE, true))
                 true
@@ -165,18 +103,6 @@ class EventDetailActivity : AppCompatActivity(),DetailEventView {
         }
     }
 
-    private fun removeFromFav() {
-        try {
-            database.use {
-                delete(FavEvent.TABLE_FAV_EVENT, "${FavEvent.IdEvent} = $id")
-            }
-            root_layout.longSnackbar(getString(R.string.fav_removed)).show()
-            isFav = false
-            updateIcon()
-        } catch (e: SQLiteConstraintException) {
-            root_layout.longSnackbar(e.toString()).show()
-        }
-    }
 
     private lateinit var mEvent:Event
 
@@ -212,5 +138,9 @@ class EventDetailActivity : AppCompatActivity(),DetailEventView {
         forwarder_away.setText(mEvent.strAwayLineupForward, this)
         substitutes_away.setText(mEvent.strAwayLineupSubstitutes, this)
         formation_away.setText(mEvent.strAwayFormation, this)
+    }
+
+    override fun showSnackBar(msg: String) {
+        root_layout.longSnackbar(msg).show()
     }
 }
