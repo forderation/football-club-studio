@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.adapter.EventAdapter
-import kotlinx.android.synthetic.main.fragment_event_list.*
+import kotlinx.android.synthetic.main.fragment_under_league_list.*
 
 class ResultEventFragment :Fragment(){
     var adapter: EventAdapter? = null
@@ -17,12 +17,12 @@ class ResultEventFragment :Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_event_list,container,false)
+        return inflater.inflate(R.layout.fragment_under_league_list,container,false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        list_event.layoutManager = LinearLayoutManager(context)
-        list_event.adapter = adapter
+        list_item.layoutManager = LinearLayoutManager(context)
+        list_item.adapter = adapter
     }
 }

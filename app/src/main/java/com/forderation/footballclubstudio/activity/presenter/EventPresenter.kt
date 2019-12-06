@@ -34,7 +34,10 @@ class EventPresenter(
 
     fun getNextEvenMatch(idLeague: String) {
         GlobalScope.launch(context.main) {
-            val data = gson.fromJson(api.doRequestAsync(Endpoints.getNextEvent(idLeague)).await(), GetEvents::class.java)
+            val data = gson.fromJson(
+                api.doRequestAsync(Endpoints.getNextEvent(idLeague)).await(),
+                GetEvents::class.java
+            )
             if(data != null){
                 if(data.events != null){
                     view.inflateListEvent(data.events)

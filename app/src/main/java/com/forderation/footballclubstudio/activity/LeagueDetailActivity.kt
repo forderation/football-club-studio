@@ -13,8 +13,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.forderation.footballclubstudio.BuildConfig
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.activity.presenter.DetailLeaguePresenter
@@ -22,7 +20,7 @@ import com.forderation.footballclubstudio.activity.view.DetailLeagueView
 import com.forderation.footballclubstudio.adapter.ClubAdapter
 import com.forderation.footballclubstudio.adapter.EventAdapter
 import com.forderation.footballclubstudio.api.ApiClient
-import com.forderation.footballclubstudio.fragment.NextLastFragment
+import com.forderation.footballclubstudio.fragment.UnderLeagueFragment
 import com.forderation.footballclubstudio.fragment.ResultEventFragment
 import com.forderation.footballclubstudio.model.club.Club
 import com.forderation.footballclubstudio.model.league.League
@@ -53,16 +51,19 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
             intent.putExtra(EventDetailActivity.AWAY_BADGE_URL,a)
             startActivity(intent)
         }
-        showFgNextLastEvent()
+        showUnderLeagueFg()
     }
 
-    private fun showFgNextLastEvent(){
-        val fg = NextLastFragment.newInstance(league?.id!!)
-        val fragment = fragmentManager.findFragmentByTag(NextLastFragment::class.java.simpleName)
-        if (fragment !is NextLastFragment){
+    private fun showUnderLeagueFg(){
+        val fg = UnderLeagueFragment.newInstance(
+            league?.id!!,
+            league?.name!!.replace(" ","%20")
+        )
+        val fragment = fragmentManager.findFragmentByTag(UnderLeagueFragment::class.java.simpleName)
+        if (fragment !is UnderLeagueFragment){
             fragmentManager
                 .beginTransaction()
-                .replace(R.id.frame_container, fg,NextLastFragment::class.java.simpleName)
+                .replace(R.id.frame_container, fg,UnderLeagueFragment::class.java.simpleName)
                 .commit()
         }
         searchView.visibility = View.VISIBLE
@@ -83,7 +84,6 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
     private lateinit var fragmentManager:FragmentManager
     private lateinit var adapter: ClubAdapter
     private lateinit var presenter: DetailLeaguePresenter
-    private lateinit var rvClub: RecyclerView
     private var league: League? = null
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -96,13 +96,11 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
         setContentView(R.layout.activity_league_detail)
         fragmentManager = supportFragmentManager
         adapter = ClubAdapter { }
-        rvClub = list_club
         presenter = DetailLeaguePresenter(this, Gson(), ApiClient())
-        rvClub.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        rvClub.adapter = adapter
         league = intent.getParcelableExtra(LEAGUE_INTENT)
         presenter.getClubList(league?.name!!)
         Picasso.get().load(league?.getSmallTrophy()).fit().centerInside().into(trophy_league)
+        Picasso.get().load(league?.badge).fit().centerInside().into(league_badge)
         desc_league.text = league?.description
         supportActionBar?.title = league?.name
         supportActionBar?.setHomeButtonEnabled(true)
@@ -149,7 +147,7 @@ class LeagueDetailActivity : AppCompatActivity(), DetailLeagueView {
                 return true
             }
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                showFgNextLastEvent()
+                showUnderLeagueFg()
                 return true
             }
         })

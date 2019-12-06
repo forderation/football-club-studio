@@ -74,9 +74,9 @@ class DetailEventPresenter(
                     FavEvent.IdAway to mEvent.idAway
                 )
             }
-            view.showSnackBar(context.resources.getString(R.string.fav_added))
+            view.showMsg(context.resources.getString(R.string.fav_added))
         } catch (e: SQLiteConstraintException) {
-            view.showSnackBar(e.toString())
+            view.showMsg(e.toString())
         }
     }
 
@@ -86,7 +86,7 @@ class DetailEventPresenter(
                 delete(FavEvent.TABLE_FAV_EVENT, "${FavEvent.IdEvent} = $id")
             }
         } catch (e: SQLiteConstraintException) {
-            view.showSnackBar(e.toString())
+            view.showMsg(e.toString())
         }
     }
 

@@ -7,16 +7,18 @@ import androidx.fragment.app.Fragment
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.adapter.PagerAdapter
 import com.fxn.OnBubbleClickListener
-import kotlinx.android.synthetic.main.fragment_next_last_match.*
+import kotlinx.android.synthetic.main.fragment_under_league.*
 
-class NextLastFragment : Fragment(){
+class UnderLeagueFragment : Fragment(){
 
     companion object{
         private const val LEAGUE_ID = "LEAGUE_ID"
-        fun newInstance(leagueId:String): NextLastFragment{
+        private const val NAME_LEAGUE = "NAME_LEAGUE"
+        fun newInstance(leagueId:String, nameLeague:String): UnderLeagueFragment{
             val args = Bundle()
             args.putString(LEAGUE_ID,leagueId)
-            val fg = NextLastFragment()
+            args.putString(NAME_LEAGUE,nameLeague)
+            val fg = UnderLeagueFragment()
             fg.arguments = args
             return fg
         }
@@ -27,7 +29,7 @@ class NextLastFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_next_last_match,container, false)
+        return inflater.inflate(R.layout.fragment_under_league,container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,24 +38,33 @@ class NextLastFragment : Fragment(){
         val bundle = arguments
         if (bundle != null){
             val lgId = bundle.getString(LEAGUE_ID)!!
+            val nameLg = bundle.getString(NAME_LEAGUE)
+            pagerAdapter.listFragment.add(ClassementFragment.newInstance(lgId.toInt()))
+            pagerAdapter.listFragment.add(ListClubFragment.newInstance(nameLg!!))
             pagerAdapter.listFragment.add(EventFragment.newInstance(lgId, EventFragment.LATEST_MATCH))
             pagerAdapter.listFragment.add(EventFragment.newInstance(lgId, EventFragment.NEXT_MATCH))
         }
-        view_pager_event.adapter = pagerAdapter
-        view_pager_event.offscreenPageLimit = 2
+        view_pager_menu.adapter = pagerAdapter
+        view_pager_menu.offscreenPageLimit = 4
         pagerAdapter.notifyDataSetChanged()
-        tab_event_menu.addBubbleListener(object : OnBubbleClickListener {
+        tab_menu.addBubbleListener(object : OnBubbleClickListener {
             override fun onBubbleClick(id: Int) {
                 when (id) {
+                    R.id.classement_tab -> {
+                        view_pager_menu.currentItem = 0
+                    }
+                    R.id.list_team_tab -> {
+                        view_pager_menu.currentItem = 1
+                    }
                     R.id.last_match_tab -> {
-                        view_pager_event.currentItem = EventFragment.LATEST_MATCH
+                        view_pager_menu.currentItem = 2
                     }
                     R.id.next_match_tab -> {
-                        view_pager_event.currentItem = EventFragment.NEXT_MATCH
+                        view_pager_menu.currentItem = 3
                     }
                 }
             }
         })
-        tab_event_menu.setupBubbleTabBar(view_pager_event)
+        tab_menu.setupBubbleTabBar(view_pager_menu)
     }
 }

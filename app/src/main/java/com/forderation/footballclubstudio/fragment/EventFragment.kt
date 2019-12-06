@@ -20,7 +20,7 @@ import com.forderation.footballclubstudio.db.database
 import com.forderation.footballclubstudio.db.toEvent
 import com.forderation.footballclubstudio.model.event.Event
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_event_list.*
+import kotlinx.android.synthetic.main.fragment_under_league_list.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.select
 
@@ -60,9 +60,9 @@ class EventFragment : Fragment(),
             intent.putExtra(EventDetailActivity.AWAY_BADGE_URL, a)
             startActivity(intent)
         }
-        if(list_event != null){
-            list_event.layoutManager = LinearLayoutManager(context)
-            list_event.adapter = mAdapter
+        if(list_item != null){
+            list_item.layoutManager = LinearLayoutManager(context)
+            list_item.adapter = mAdapter
         }
     }
 
@@ -87,15 +87,15 @@ class EventFragment : Fragment(),
             intent.putExtra(EventDetailActivity.AWAY_BADGE_URL, a)
             startActivityForResult(intent, REQUEST_UPDATE_FAV)
         }
-        list_event.layoutManager = LinearLayoutManager(context)
-        list_event.adapter = mAdapterFav
+        list_item.layoutManager = LinearLayoutManager(context)
+        list_item.adapter = mAdapterFav
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_event_list, container, false)
+        return inflater.inflate(R.layout.fragment_under_league_list, container, false)
     }
 
     private lateinit var mPresenter: EventPresenter
@@ -104,7 +104,7 @@ class EventFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        list_event.layoutManager = LinearLayoutManager(context)
+        list_item.layoutManager = LinearLayoutManager(context)
         val bundle = arguments
         if (bundle != null) {
             val typeEvent = bundle.getInt(TYPE_EVENT)

@@ -7,12 +7,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
         <com.fxn.BubbleTabBar
-            android:id="@+id/tab_event_menu"
+            android:id="@+id/tab_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="16dp"
             android:padding="7dp"
-            app:bubbletab_menuResource="@menu/tab_menu_event"
+            app:bubbletab_menuResource="@menu/tab_menu_league"
             app:bubbletab_disabled_icon_color="@color/colorAccent"
             app:bubbletab_horizontal_padding="20dp"
             app:bubbletab_icon_size="20dp"
@@ -20,7 +20,7 @@
             app:bubbletab_vertical_padding="10dp">
         </com.fxn.BubbleTabBar>
         <androidx.viewpager.widget.ViewPager
-            android:id="@+id/view_pager_event"
+            android:id="@+id/view_pager_menu"
             android:layout_width="match_parent"
             android:layout_height="500dp"/>
 </LinearLayout>

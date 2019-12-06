@@ -25,9 +25,11 @@
     <string name="formation">Formation</string>
     <string name="fav_removed">Match removed from favourite</string>
     <string name="fav_added">Added to favorite</string>
-    <string name="loading_leagues">Now run to get league ...</string>
+    <string name="loading_leagues">Now run to get league …</string>
     <string name="more_than_60">more than 60</string>
     <string name="fav_match">fav match</string>
     <string name="less_than_30">less than 30</string>
     <string name="just_10_item">just 10 item</string>
+    <string name="classement">Classement</string>
+    <string name="list_team">List Team</string>
 </resources>

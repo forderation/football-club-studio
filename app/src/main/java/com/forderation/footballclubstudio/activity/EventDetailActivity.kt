@@ -107,8 +107,7 @@ class EventDetailActivity : AppCompatActivity(),DetailEventView {
     private lateinit var mEvent:Event
 
     override fun showDetailEvent(listEvent: List<Event>) {
-        val mEvent = listEvent[0]
-        this.mEvent = mEvent
+        this.mEvent = listEvent[0]
         title_event.text = mEvent.name
         time_event.text = mEvent.time
         date_event.text = mEvent.date
@@ -140,7 +139,7 @@ class EventDetailActivity : AppCompatActivity(),DetailEventView {
         formation_away.setText(mEvent.strAwayFormation, this)
     }
 
-    override fun showSnackBar(msg: String) {
+    override fun showMsg(msg: String) {
         root_layout.longSnackbar(msg).show()
     }
 }
