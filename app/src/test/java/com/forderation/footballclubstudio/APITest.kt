@@ -8,13 +8,12 @@ import com.forderation.footballclubstudio.activity.view.DetailEventView
 import com.forderation.footballclubstudio.activity.view.LeaguesView
 import com.forderation.footballclubstudio.activity.view.ListEventView
 import com.forderation.footballclubstudio.api.ApiClient
-import com.forderation.footballclubstudio.api.Endpoints
 import com.forderation.footballclubstudio.model.event.Event
 import com.forderation.footballclubstudio.model.event.GetEvents
 import com.forderation.footballclubstudio.model.event.SearchEvent
 import com.forderation.footballclubstudio.model.league.GetLeagues
 import com.forderation.footballclubstudio.model.league.League
-import com.forderation.footballclubstudio.utils.EventViewModel
+import com.forderation.footballclubstudio.utils.SearchViewModel
 import com.forderation.footballclubstudio.utils.TestContextProvider
 import com.google.gson.Gson
 import kotlinx.coroutines.Deferred
@@ -63,7 +62,7 @@ class APITest {
     private lateinit var detailEventPresenter: DetailEventPresenter
 
     @Mock
-    private lateinit var eventViewModel: EventViewModel
+    private lateinit var searchViewModel: SearchViewModel
 
     @Mock
     private lateinit var detailEventView: DetailEventView
@@ -74,7 +73,7 @@ class APITest {
         eventPresenter = EventPresenter(listEventView, gson, apiClient, TestContextProvider())
         leaguesPresenter = LeaguesPresenter(leagueView, gson, apiClient, TestContextProvider())
         detailEventPresenter = DetailEventPresenter(detailEventView, gson, apiClient, TestContextProvider())
-        eventViewModel = EventViewModel(gson,apiClient,TestContextProvider(),listEvent,onResponse,onLoading)
+        searchViewModel = SearchViewModel(gson,apiClient,TestContextProvider(),listEvent,onResponse,onLoading)
     }
 
     @Test
@@ -92,7 +91,7 @@ class APITest {
             Mockito.`when`(onResponse.value).thenReturn("")
             Mockito.`when`(onLoading.value).thenReturn(true)
             Mockito.`when`(listEvent.value).thenReturn(response.events)
-            eventViewModel.getData(eventName)
+            searchViewModel.getListNextMatch(eventName)
             Mockito.verify(onResponse).value = "Search success"
         }
     }

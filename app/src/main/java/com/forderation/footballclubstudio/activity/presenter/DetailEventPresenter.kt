@@ -20,10 +20,11 @@ import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 
 class DetailEventPresenter(
-    private val context:Context,
     private val view: DetailEventView, private val gson: Gson,
     private val apiClient: ApiClient, private val coroutineContext: CoroutineContextProvider = CoroutineContextProvider()
 ) {
+
+    lateinit var context:Context
 
     fun getDetailEvent(idEvent: String) {
         GlobalScope.launch(coroutineContext.main){

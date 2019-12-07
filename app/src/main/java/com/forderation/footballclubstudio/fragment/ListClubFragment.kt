@@ -10,7 +10,7 @@ import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.adapter.ClubAdapter
 import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.api.Endpoints
-import com.forderation.footballclubstudio.model.club.GetTeams
+import com.forderation.footballclubstudio.model.club.GetClub
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_under_league_list.*
 import kotlinx.coroutines.Dispatchers
@@ -47,7 +47,7 @@ class ListClubFragment: Fragment(){
             GlobalScope.launch(Dispatchers.Main) {
                 val resp = Gson().fromJson(
                     ApiClient().doRequestAsync(Endpoints.getListClub(idLeague.toString())).await(),
-                    GetTeams::class.java
+                    GetClub::class.java
                 )
                 if(list_item!=null){
                     val adapter = ClubAdapter {}

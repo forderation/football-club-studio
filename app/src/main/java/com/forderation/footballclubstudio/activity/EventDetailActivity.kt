@@ -68,7 +68,8 @@ class EventDetailActivity : AppCompatActivity(),DetailEventView {
                 .error(R.drawable.image_failed)
                 .into(away_badge)
         }
-        presenter = DetailEventPresenter(this, this,Gson(), ApiClient())
+        presenter = DetailEventPresenter(this,Gson(), ApiClient())
+        presenter.context = this
         presenter.getDetailEvent(id)
         supportActionBar?.title = "Match Detail"
         supportActionBar?.setHomeButtonEnabled(true)

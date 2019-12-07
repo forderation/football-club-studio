@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Team(
+data class TeamClassement(
     @SerializedName("name")
     val name: String?,
     @SerializedName("teamid")

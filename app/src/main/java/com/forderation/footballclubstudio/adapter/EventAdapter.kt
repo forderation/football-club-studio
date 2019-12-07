@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.api.Endpoints
-import com.forderation.footballclubstudio.model.club.GetTeams
+import com.forderation.footballclubstudio.model.club.GetClub
 import com.forderation.footballclubstudio.model.event.Event
 import com.forderation.footballclubstudio.utils.CoroutineContextProvider
 import com.google.android.material.snackbar.Snackbar
@@ -68,7 +68,7 @@ class EventAdapter(
             GlobalScope.launch(context.main){
                 val respHome = gson.fromJson(
                     apiClient.doRequestAsync(Endpoints.getDetailTeam(mEvent.idHome!!)).await(),
-                    GetTeams::class.java
+                    GetClub::class.java
                 )
                 if (respHome.clubs!!.isEmpty()) {
                     Snackbar
@@ -88,7 +88,7 @@ class EventAdapter(
                 }
                 val respAway = gson.fromJson(
                     apiClient.doRequestAsync(Endpoints.getDetailTeam(mEvent.idAway!!)).await(),
-                    GetTeams::class.java
+                    GetClub::class.java
                 )
                 if (respAway.clubs!!.isEmpty()) {
                     Snackbar

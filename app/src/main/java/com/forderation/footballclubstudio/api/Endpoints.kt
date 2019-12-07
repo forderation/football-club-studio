@@ -11,6 +11,8 @@ object Endpoints {
 
     fun getClassement(idLeague: String) = "api/v1/json/1/lookuptable.php?l=$idLeague"
 
+    fun getTeamByName(teamName: String) = "api/v1/json/1/searchteams.php?t=$teamName"
+
     fun getDetailEvent(idEvent: String) = "api/v1/json/1/lookupevent.php?id=$idEvent"
 
     fun getLatestEvent(idLeague: String) = "api/v1/json/1/eventspastleague.php?id=$idLeague"

@@ -7,7 +7,9 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Club(
     @SerializedName("idTeam")
-    val id: String?,
+    val idTeam: String?,
+    @SerializedName("idLeague")
+    val idLeague: String?,
     @SerializedName("strTeam")
     val name: String?,
     @SerializedName("strTeamBadge")

@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 class GetClassement (
     @SerializedName("table")
-    val list: List<Team>?
+    val list: List<TeamClassement>?
 )
