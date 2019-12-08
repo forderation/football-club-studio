@@ -14,8 +14,6 @@ data class Club(
     val name: String?,
     @SerializedName("strTeamBadge")
     val badge: String?,
-    @SerializedName("strAlternate")
-    val alternate: String?,
     @SerializedName("strStadium")
     val strStadium: String?,
     @SerializedName("strStadiumThumb")
@@ -25,8 +23,6 @@ data class Club(
     @SerializedName("strStadiumLocation")
     val strStadiumLocation: String?,
     @SerializedName("intStadiumCapacity")
-    val intStadiumCapacity: Int?,
-    @SerializedName("strDescriptionEN")
     val strDescriptionEN: String?,
     @SerializedName("strTeamJersey")
     val strTeamJersey: String?,
@@ -37,9 +33,25 @@ data class Club(
     @SerializedName("strTeamFanart3")
     val strTeamFanart3: String?,
     @SerializedName("strTeamFanart4")
-    val strTeamFanart4: String?
-) : Parcelable {
+    val strTeamFanart4: String?,
+    @SerializedName("intFormedYear")
+    val intFormedYear: String?,
+    @SerializedName("strWebsite")
+    val strWebsite: String?,
+    @SerializedName("strFacebook")
+    val strFacebook: String?,
+    @SerializedName("strTwitter")
+    val strTwitter: String?,
+    @SerializedName("strInstagram")
+    val strInstagram: String?
+    ) : Parcelable {
     fun getBadgeSmall(): String {
         return badge.plus("/preview")
+    }
+    fun getStadiumSmall(): String {
+        return strStadiumThumb.plus("/preview")
+    }
+    fun getJerseySmall(): String {
+        return strTeamJersey.plus("/preview")
     }
 }

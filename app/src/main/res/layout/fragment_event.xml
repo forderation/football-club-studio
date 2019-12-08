@@ -13,7 +13,7 @@
     app:cardUseCompatPadding="true"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@color/colorPrimary"
+        android:background="@color/colorActive"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView

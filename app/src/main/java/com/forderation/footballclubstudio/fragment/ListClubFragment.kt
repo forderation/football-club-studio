@@ -1,5 +1,6 @@
 package com.forderation.footballclubstudio.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.forderation.footballclubstudio.R
+import com.forderation.footballclubstudio.activity.ClubDetailActivity
 import com.forderation.footballclubstudio.adapter.ClubAdapter
 import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.api.Endpoints
@@ -16,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_under_league_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.support.v4.startActivity
 
 class ListClubFragment: Fragment(){
 
@@ -50,7 +53,11 @@ class ListClubFragment: Fragment(){
                     GetClub::class.java
                 )
                 if(list_item!=null){
-                    val adapter = ClubAdapter {}
+                    val adapter = ClubAdapter {
+                        val intent = Intent(activity, ClubDetailActivity::class.java)
+                        intent.putExtra(ClubDetailActivity.CLUB_ID,it.idTeam)
+                        startActivity(intent)
+                    }
                     if(resp.clubs!= null){
                         adapter.clubList = resp.clubs.toMutableList()
                         list_item.adapter = adapter

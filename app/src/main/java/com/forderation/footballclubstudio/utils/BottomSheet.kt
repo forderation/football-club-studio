@@ -20,6 +20,6 @@ class BottomSheet(private val desc: String) : BottomSheetDialogFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        league_desc.text = "\n".plus(desc.replace(";","\n"))
+        league_desc.text = desc.replace(";","\n")
     }
 }

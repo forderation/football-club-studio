@@ -13,8 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.ClubDetailActivity"></activity>
-        <activity android:name=".activity.EventDetailActivity"></activity>
+        <activity android:name=".activity.ClubDetailActivity"/>
+        <activity android:name=".activity.EventDetailActivity"/>
         <activity
             android:name=".activity.LeagueDetailActivity"
             android:label="@string/title_activity_league_detail" />

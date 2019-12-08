@@ -1,5 +1,6 @@
 package com.forderation.footballclubstudio.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.forderation.footballclubstudio.R
+import com.forderation.footballclubstudio.activity.ClubDetailActivity
 import com.forderation.footballclubstudio.adapter.ClassementAdapter
 import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.api.Endpoints
@@ -52,6 +54,9 @@ class ClassementFragment: Fragment(){
                     if(resp!=null){
                         if(resp.list!=null){
                             list_item.adapter = ClassementAdapter(resp.list){
+                                val intent = Intent(activity, ClubDetailActivity::class.java)
+                                intent.putExtra(ClubDetailActivity.CLUB_ID,it)
+                                startActivity(intent)
                             }
                         }
                     }
