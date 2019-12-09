@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_event_fav"
+        android:icon="@drawable/ic_event_note_black_24dp"
+        android:title="@string/favourite_event"
+        android:iconTint="@color/colorWhite"
+        android:checked="true"
+        tools:targetApi="o" />
+    <item
+        android:id="@+id/item_club_fav"
+        android:iconTint="@color/colorWhite"
+        android:icon="@drawable/soccer_logo"
+        android:title="@string/favourite_club"
+        tools:targetApi="o" />
+</menu>

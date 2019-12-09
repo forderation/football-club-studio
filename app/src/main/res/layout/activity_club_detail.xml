@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
+    android:id="@+id/sv_club_detail"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,13 +13,13 @@
         android:layout_width="match_parent"
         android:paddingBottom="16dp"
         android:layout_height="wrap_content">
-        <androidx.viewpager.widget.ViewPager
+        <com.zhpan.bannerview.BannerViewPager
             android:id="@+id/banner_fan_art"
             android:layout_width="0dp"
             android:layout_height="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"  />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView"
@@ -37,7 +38,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:padding="8dp"
-                android:src="@drawable/arsenal" />
+                />
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
@@ -57,7 +58,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:padding="8dp"
-                android:src="@drawable/jersey" />
+                />
         </com.google.android.material.card.MaterialCardView>
         <FrameLayout
             android:id="@+id/materialCardView2"
@@ -81,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:src="@drawable/stadium" />
+                    />
             </com.google.android.material.card.MaterialCardView>
         </FrameLayout>
 
@@ -106,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:drawableStart="@drawable/ic_location_on_black_24dp"
-                    android:text="Location:"
+                    android:text="@string/location"
                     android:textColor="@color/colorWhite"
                     android:textSize="10sp"
                     android:textStyle="bold"
@@ -117,20 +118,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Emirates Stadium"
                     android:textColor="@color/colorWhite"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    tools:ignore="SmallSp" />
 
                 <TextView
                     android:id="@+id/tv_club_loc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Holloway, London"
                     android:maxLines="2"
                     android:ellipsize="end"
                     android:textColor="@color/colorWhite"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    tools:ignore="SmallSp" />
             </LinearLayout>
         </FrameLayout>
 
@@ -154,7 +155,8 @@
                     android:text="@string/established"
                     android:textSize="10sp"
                     android:textColor="@color/colorWhite"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="SmallSp" />
 
                 <TextView
                     android:textSize="10sp"
@@ -162,10 +164,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="1892"
                     android:textStyle="bold"
                     android:textColor="@color/colorWhite"
-                    />
+                    tools:ignore="SmallSp" />
             </LinearLayout>
         </FrameLayout>
         
@@ -176,7 +177,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="10"
-            android:text="@string/club_desc_dump"
             android:textColor="@color/colorWhite"
             app:layout_constraintTop_toBottomOf="@+id/materialCardView2"
             app:layout_constraintStart_toStartOf="parent"
@@ -192,7 +192,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="10"
-            android:text="@string/std_dump"
             android:textColor="@color/colorWhite"
             android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
@@ -225,7 +224,6 @@
                 android:layout_marginStart="5dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="arsenal.com"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="10sp" />
@@ -243,7 +241,6 @@
                 android:layout_marginStart="5dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="arsenal.com"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="10sp" />
@@ -261,7 +258,6 @@
                 android:layout_marginStart="5dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="arsenal.com"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="10sp" />
@@ -279,7 +275,6 @@
                 android:layout_marginStart="5dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="arsenal.com"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="10sp" />

@@ -20,7 +20,7 @@ import com.forderation.footballclubstudio.db.database
 import com.forderation.footballclubstudio.db.toEvent
 import com.forderation.footballclubstudio.model.event.Event
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_under_league_list.*
+import kotlinx.android.synthetic.main.fragment_rv.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.select
 
@@ -69,7 +69,9 @@ class EventFragment : Fragment(),
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == REQUEST_UPDATE_FAV){
             if(resultCode == Activity.RESULT_OK){
-                mPresenter.getListEventFav()
+                if (data?.getBooleanExtra(EventDetailActivity.IS_FAV_CHANGE, false) == true) {
+                    mPresenter.getListEventFav()
+                }
             }
         }
     }
@@ -95,7 +97,7 @@ class EventFragment : Fragment(),
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_under_league_list, container, false)
+        return inflater.inflate(R.layout.fragment_rv, container, false)
     }
 
     private lateinit var mPresenter: EventPresenter

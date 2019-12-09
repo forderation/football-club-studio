@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.adapter.ClubAdapter
 import com.forderation.footballclubstudio.adapter.EventAdapter
-import kotlinx.android.synthetic.main.fragment_under_league_list.*
+import kotlinx.android.synthetic.main.fragment_rv.*
 
 class ResultSearchUnderLeague :Fragment(){
     var eventAdapter: EventAdapter? = null
@@ -21,7 +21,7 @@ class ResultSearchUnderLeague :Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_under_league_list,container,false)
+        return inflater.inflate(R.layout.fragment_rv,container,false)
     }
 
     companion object{

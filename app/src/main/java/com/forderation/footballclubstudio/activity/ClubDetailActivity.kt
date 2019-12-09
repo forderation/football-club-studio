@@ -1,41 +1,70 @@
 package com.forderation.footballclubstudio.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.forderation.footballclubstudio.R
+import com.forderation.footballclubstudio.R.drawable.*
 import com.forderation.footballclubstudio.activity.presenter.ClubDetailPresenter
 import com.forderation.footballclubstudio.activity.view.ClubDetailView
+import com.forderation.footballclubstudio.adapter.BannerViewHolder
 import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.model.club.Club
 import com.forderation.footballclubstudio.utils.BottomSheet
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
+import com.zhpan.bannerview.BannerViewPager
+import com.zhpan.bannerview.adapter.OnPageChangeListenerAdapter
+import com.zhpan.bannerview.constants.IndicatorGravity
+import com.zhpan.bannerview.constants.IndicatorSlideMode
+import com.zhpan.bannerview.utils.BannerUtils.dp2px
 import kotlinx.android.synthetic.main.activity_club_detail.*
+import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.find
 
 class ClubDetailActivity : AppCompatActivity(), ClubDetailView {
 
     companion object{
         const val CLUB_ID = "CLUB_ID"
+        const val IS_FAV_CHANGE = "IS_FAV_CHANGE"
     }
+
+    private var id: String? = null
+    private lateinit var presenter:ClubDetailPresenter
+    private lateinit var favMenu: MenuItem
+    private var isFav = false
+    private lateinit var mClub: Club
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_club_detail)
-        val presenter = ClubDetailPresenter(this, Gson(), ApiClient())
-        presenter.getDetailClub(intent.getStringExtra(CLUB_ID))
+        presenter = ClubDetailPresenter(this, Gson(), ApiClient())
+        presenter.context = this
+        id = intent.getStringExtra(CLUB_ID)!!
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        if(id!=null){
+            isFav = presenter.checkFav(id!!)
+            if(isFav){
+                presenter.getDetailClubByDB(id!!)
+            }else{
+                presenter.getDetailClub(id)
+            }
+        }
     }
 
     override fun inflateDetailView(club: Club) {
+        mClub = club
         val picasso = Picasso.get()
         supportActionBar?.title = club.name
-        picasso.load(club.getBadgeSmall()).fit().into(logo_club)
-        picasso.load(club.getJerseySmall()).fit().into(team_jersey)
-        picasso.load(club.getStadiumSmall()).into(img_stadium)
+        picasso.load(club.getBadgeSmall()).placeholder(progress_animation).error(image_failed).fit().into(logo_club)
+        picasso.load(club.getJerseySmall()).placeholder(progress_animation).error(image_failed).fit().into(team_jersey)
+        picasso.load(club.getStadiumSmall()).placeholder(progress_animation).error(image_failed).into(img_stadium)
         tv_club_desc.text = club.strDescriptionEN
         tv_club_desc.setOnClickListener {
             BottomSheet(club.strDescriptionEN!!).show(supportFragmentManager,"ClubDetail")
@@ -71,6 +100,56 @@ class ClubDetailActivity : AppCompatActivity(), ClubDetailView {
             intent.data = Uri.parse(("https://").plus(club.strTwitter))
             startActivity(intent)
         }
+        val listBanner = mutableListOf<String>()
+        if(club.strTeamFanart1!=null){
+            listBanner.add(club.strTeamFanart1)
+        }
+        if(club.strTeamFanart2!=null){
+            listBanner.add(club.strTeamFanart2)
+        }
+        if(club.strTeamFanart3!=null){
+            listBanner.add(club.strTeamFanart3)
+        }
+        if(club.strTeamFanart4!=null){
+            listBanner.add(club.strTeamFanart4)
+        }
+        mViewPager = findViewById(R.id.banner_fan_art)
+        mViewPager.setCanLoop(true)
+            .setIndicatorSlideMode(IndicatorSlideMode.SMOOTH)
+            .setIndicatorMargin(0, 0, 0, dp2px(40f))
+            .setIndicatorGravity(IndicatorGravity.CENTER)
+            .setHolderCreator { BannerViewHolder() }
+            .setOnPageChangeListener(
+                object : OnPageChangeListenerAdapter() {
+                    override fun onPageSelected(position: Int) {
+                        listBanner[position]
+                    }
+                }
+            )
+            .create(listBanner.toList())
+    }
+
+    private lateinit var mViewPager: BannerViewPager<String, BannerViewHolder>
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.option_menu_match, menu)
+        favMenu = menu?.getItem(0)!!
+        updateIcon()
+        return true
+    }
+
+    private fun updateIcon() {
+        if (isFav) {
+            favMenu.icon = ContextCompat.getDrawable(this, ic_favorite_black_24dp)
+        } else {
+            favMenu.icon =
+                ContextCompat.getDrawable(this, ic_favorite_border_black_24dp)
+        }
+    }
+
+    override fun showMsg(msg: String) {
+        sv_club_detail.longSnackbar(msg).show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -79,7 +158,22 @@ class ClubDetailActivity : AppCompatActivity(), ClubDetailView {
                 this.finish()
                 true
             }
-            else -> false
+            R.id.fav_match_item -> {
+                if (!isFav) {
+                    presenter.addToFav(mClub,id!!)
+                    isFav = true
+                    updateIcon()
+                } else {
+                    presenter.removeFav(id!!)
+                    isFav = false
+                    updateIcon()
+                }
+                setResult(Activity.RESULT_OK, Intent().putExtra(IS_FAV_CHANGE, true))
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
     }
 }

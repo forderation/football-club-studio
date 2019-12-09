@@ -2,7 +2,6 @@ package com.forderation.footballclubstudio.activity.view
 
 import com.forderation.footballclubstudio.model.club.Club
 
-interface ClubDetailView{
-    fun inflateDetailView(club: Club)
-    fun showMsg(msg: String)
+interface ListClubView {
+    fun inflateListClub(listClub : List<Club>)
 }

@@ -57,10 +57,34 @@ class FavDBHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "fcs_database.db"
             FavEvent.HomeBadge to TEXT,
             FavEvent.AwayBadge to TEXT
         )
+        db.createTable(
+            FavClub.TABLE_FAV_CLUB, true,
+            FavClub.id to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+            FavClub.idTeam to TEXT,
+            FavClub.idLeague to TEXT,
+            FavClub.name to TEXT,
+            FavClub.badge to TEXT,
+            FavClub.strStadium to TEXT,
+            FavClub.strStadiumThumb to TEXT,
+            FavClub.strStadiumDescription to TEXT,
+            FavClub.strStadiumLocation to TEXT,
+            FavClub.strDescriptionEN to TEXT,
+            FavClub.strTeamJersey to TEXT,
+            FavClub.strTeamFanart1 to TEXT,
+            FavClub.strTeamFanart2 to TEXT,
+            FavClub.strTeamFanart3 to TEXT,
+            FavClub.strTeamFanart4 to TEXT,
+            FavClub.intFormedYear to TEXT,
+            FavClub.strWebsite to TEXT,
+            FavClub.strFacebook to TEXT,
+            FavClub.strTwitter to TEXT,
+            FavClub.strInstagram to TEXT
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.dropTable(FavEvent.TABLE_FAV_EVENT, true)
+        db.dropTable(FavClub.TABLE_FAV_CLUB, true)
     }
 }
 

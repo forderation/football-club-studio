@@ -4,15 +4,13 @@ import android.widget.AutoCompleteTextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import com.forderation.footballclubstudio.R.id.rv_leagues
-import com.forderation.footballclubstudio.R.id.search_menu
+import com.forderation.footballclubstudio.R.id.*
 import com.forderation.footballclubstudio.activity.LeaguesActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -47,6 +45,8 @@ class LeaguesTest {
         onView(withId(rv_leagues)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click())
         )
+        onView(withId(next_match_tab))
+            .perform(click())
         onView(withId(search_menu))
             .check(matches(isDisplayed()))
         runBlocking { delay(2000) }
@@ -67,6 +67,8 @@ class LeaguesTest {
         onView(withId(rv_leagues)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click())
         )
+        onView(withId(list_team_tab))
+            .perform(click())
         onView(withId(search_menu))
             .check(matches(isDisplayed()))
         runBlocking { delay(2000) }

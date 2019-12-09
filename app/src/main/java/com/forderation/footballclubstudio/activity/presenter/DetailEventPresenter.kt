@@ -8,6 +8,7 @@ import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.api.Endpoints
 import com.forderation.footballclubstudio.db.FavEvent
 import com.forderation.footballclubstudio.db.database
+import com.forderation.footballclubstudio.db.toEvent
 import com.forderation.footballclubstudio.model.event.Event
 import com.forderation.footballclubstudio.model.event.GetEvents
 import com.forderation.footballclubstudio.utils.CoroutineContextProvider
@@ -31,7 +32,19 @@ class DetailEventPresenter(
             val resp = gson.fromJson(
                 apiClient.doRequestAsync(Endpoints.getDetailEvent(idEvent)).await(), GetEvents::class.java
             )
-            view.showDetailEvent(resp.events!!)
+            view.showDetailEvent(resp.events!![0])
+        }
+    }
+
+    fun getDetailEventByDB(id: String){
+        context.database.use {
+            val result = select(FavEvent.TABLE_FAV_EVENT)
+                .whereArgs(
+                    "(IdEvent = {idEvent})",
+                    "idEvent" to id
+                )
+            val favourites = result.parseList(classParser<FavEvent>())
+            view.showDetailEvent(favourites[0].toEvent())
         }
     }
 

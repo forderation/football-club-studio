@@ -22,7 +22,7 @@ data class Club(
     val strStadiumDescription: String?,
     @SerializedName("strStadiumLocation")
     val strStadiumLocation: String?,
-    @SerializedName("intStadiumCapacity")
+    @SerializedName("strDescriptionEN")
     val strDescriptionEN: String?,
     @SerializedName("strTeamJersey")
     val strTeamJersey: String?,

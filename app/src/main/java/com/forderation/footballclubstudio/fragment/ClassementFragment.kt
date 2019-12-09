@@ -14,7 +14,7 @@ import com.forderation.footballclubstudio.api.ApiClient
 import com.forderation.footballclubstudio.api.Endpoints
 import com.forderation.footballclubstudio.model.classement.GetClassement
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_under_league_list.*
+import kotlinx.android.synthetic.main.fragment_rv.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -37,7 +37,7 @@ class ClassementFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_under_league_list, container, false)
+        return inflater.inflate(R.layout.fragment_rv, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

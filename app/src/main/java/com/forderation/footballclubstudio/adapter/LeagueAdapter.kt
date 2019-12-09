@@ -46,7 +46,9 @@ class LeagueAdapter(
         private val descLeague:TextView = itemView.find(desc_league)
         private val backLeague:ImageView = itemView.find(background_league)
         fun bind(league:League, leagueListener: (League) -> Unit){
-            Picasso.get().load(league.badge).fit().centerInside().into(imgLeague)
+            Picasso.get().load(league.badge).fit().centerInside().placeholder(R.drawable.progress_animation).error(
+                R.drawable.image_failed
+            ).into(imgLeague)
             Picasso.get().load(league.smallBackground())
                 .transform(BlurTransformation(itemView.context, 25, 1))
                 .fit().centerCrop().into(backLeague)

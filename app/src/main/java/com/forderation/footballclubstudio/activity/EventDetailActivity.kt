@@ -28,7 +28,10 @@ class EventDetailActivity : AppCompatActivity(),DetailEventView {
 
     private var isFav: Boolean = false
     private lateinit var id: String
+    private lateinit var homeImgUrl: String
+    private lateinit var awayImgUrl: String
     private var favMenu: MenuItem? = null
+    private lateinit var presenter:DetailEventPresenter
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
@@ -46,9 +49,6 @@ class EventDetailActivity : AppCompatActivity(),DetailEventView {
                 ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_black_24dp)
         }
     }
-
-    private lateinit var homeImgUrl: String
-    private lateinit var awayImgUrl: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,14 +70,16 @@ class EventDetailActivity : AppCompatActivity(),DetailEventView {
         }
         presenter = DetailEventPresenter(this,Gson(), ApiClient())
         presenter.context = this
-        presenter.getDetailEvent(id)
         supportActionBar?.title = "Match Detail"
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         isFav = presenter.checkFav(id)
+        if(isFav){
+            presenter.getDetailEventByDB(id)
+        }else{
+            presenter.getDetailEvent(id)
+        }
     }
-
-    private lateinit var presenter:DetailEventPresenter
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -107,8 +109,8 @@ class EventDetailActivity : AppCompatActivity(),DetailEventView {
 
     private lateinit var mEvent:Event
 
-    override fun showDetailEvent(listEvent: List<Event>) {
-        this.mEvent = listEvent[0]
+    override fun showDetailEvent(mEvent: Event) {
+        this.mEvent = mEvent
         title_event.text = mEvent.name
         time_event.text = mEvent.time
         date_event.text = mEvent.date

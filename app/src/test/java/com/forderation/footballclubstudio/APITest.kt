@@ -8,6 +8,7 @@ import com.forderation.footballclubstudio.activity.view.DetailEventView
 import com.forderation.footballclubstudio.activity.view.LeaguesView
 import com.forderation.footballclubstudio.activity.view.ListEventView
 import com.forderation.footballclubstudio.api.ApiClient
+import com.forderation.footballclubstudio.api.Endpoints
 import com.forderation.footballclubstudio.model.event.Event
 import com.forderation.footballclubstudio.model.event.GetEvents
 import com.forderation.footballclubstudio.model.event.SearchEvent
@@ -26,6 +27,7 @@ import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
 
+@Suppress("SENSELESS_COMPARISON")
 class APITest {
 
     @Mock
@@ -102,6 +104,12 @@ class APITest {
         val response = GetEvents(events)
         val idEvent = "441613"
         runBlocking {
+            val mRes = Gson().fromJson(ApiClient().doRequestAsync(Endpoints.getDetailEvent(idEvent)).await(),GetEvents::class.java)
+            if(mRes!=null){
+                if(mRes.events != null){
+                    events.add(mRes.events!![0])
+                }
+            }
             Mockito.`when`(apiClient.doRequestAsync(ArgumentMatchers.anyString()))
                 .thenReturn(responseApi)
             Mockito.`when`(responseApi.await()).thenReturn("")
@@ -109,7 +117,9 @@ class APITest {
                 gson.fromJson("",GetEvents::class.java)
             ).thenReturn(response)
             detailEventPresenter.getDetailEvent(idEvent)
-            Mockito.verify(detailEventView).showDetailEvent(response.events!!)
+            if(response.events!!.get(0) != null){
+                Mockito.verify(detailEventView).showDetailEvent(response.events!![0])
+            }
         }
     }
 

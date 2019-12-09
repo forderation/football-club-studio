@@ -1,18 +1,15 @@
 package com.forderation.footballclubstudio.fragment
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import com.forderation.footballclubstudio.R
 import com.forderation.footballclubstudio.activity.view.DetailLeagueView
 import com.forderation.footballclubstudio.adapter.PagerAdapter
 import com.fxn.OnBubbleClickListener
 import kotlinx.android.synthetic.main.fragment_under_league.*
-import org.jetbrains.anko.support.v4.onPageChangeListener
 
 class UnderLeagueFragment : Fragment(){
     private lateinit var detailLeagueView: DetailLeagueView
@@ -47,7 +44,7 @@ class UnderLeagueFragment : Fragment(){
             val lgId = bundle.getString(LEAGUE_ID)!!
             val nameLg = bundle.getString(NAME_LEAGUE)
             pagerAdapter.listFragment.add(ClassementFragment.newInstance(lgId.toInt()))
-            pagerAdapter.listFragment.add(ListClubFragment.newInstance(nameLg!!))
+            pagerAdapter.listFragment.add(ListClubFragment.newInstance(nameLg!!, ListClubFragment.NET_LIST_CLUB))
             pagerAdapter.listFragment.add(EventFragment.newInstance(lgId, EventFragment.LATEST_MATCH))
             pagerAdapter.listFragment.add(EventFragment.newInstance(lgId, EventFragment.NEXT_MATCH))
         }
